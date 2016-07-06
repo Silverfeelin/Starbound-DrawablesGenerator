@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DrawablesGenerator.Properties
-{
-
-
+namespace DrawablesGenerator.Properties {
+    using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -22,49 +22,138 @@ namespace DrawablesGenerator.Properties
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources
-    {
-
+    internal class Resources {
+        
         private static global::System.Resources.ResourceManager resourceMan;
-
+        
         private static global::System.Globalization.CultureInfo resourceCulture;
-
+        
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources()
-        {
+        internal Resources() {
         }
-
+        
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager
-        {
-            get
-            {
-                if ((resourceMan == null))
-                {
+        internal static global::System.Resources.ResourceManager ResourceManager {
+            get {
+                if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DrawablesGenerator.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
             }
         }
-
+        
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture
-        {
-            get
-            {
+        internal static global::System.Globalization.CultureInfo Culture {
+            get {
                 return resourceCulture;
             }
-            set
-            {
+            set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;itemName&quot; : &quot;teslastaff&quot;,
+        ///  &quot;level&quot; : 1,
+        ///  &quot;price&quot; : 1,
+        ///  &quot;maxStack&quot; : 1000,
+        ///  &quot;rarity&quot; : &quot;Essential&quot;,
+        ///  &quot;description&quot; : &quot;An item that has custom drawables applied to it!&quot;,
+        ///  &quot;shortdescription&quot; : &quot;A Custom Item&quot;,
+        ///  &quot;category&quot; : &quot;^orange;Drawable Item^reset;&quot;,
+        ///  &quot;twoHanded&quot; : true,
+        ///  &quot;itemTags&quot; : [&quot;weapon&quot;],
+        ///  &quot;animationParts&quot; : {
+        ///    &quot;staff&quot; : &quot;/assetMissing.png&quot;,
+        ///    &quot;stone&quot; : &quot;/assetMissing.png&quot;,
+        ///	&quot;chargeEffect&quot; : &quot;&quot;
+        ///  },
+        ///  &quot;scripts&quot; : [],
+        ///  &quot;elementalType&quot; : &quot;physical&quot;,
+        ///  &quot;primaryA [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ActiveItem {
+            get {
+                return ResourceManager.GetString("ActiveItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap DarkSmall {
+            get {
+                object obj = ResourceManager.GetObject("DarkSmall", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] hobo {
+            get {
+                object obj = ResourceManager.GetObject("hobo", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Ice {
+            get {
+                object obj = ResourceManager.GetObject("Ice", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap LightSmall {
+            get {
+                object obj = ResourceManager.GetObject("LightSmall", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap NaturalSmall {
+            get {
+                object obj = ResourceManager.GetObject("NaturalSmall", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap normal {
+            get {
+                object obj = ResourceManager.GetObject("normal", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap previewCharSmall {
+            get {
+                object obj = ResourceManager.GetObject("previewCharSmall", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

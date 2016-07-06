@@ -5,8 +5,122 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DrawablesGenerator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Drawables Generator"
+        MinWidth="714" Width="714" MaxWidth="714"
+        MinHeight="452" Height="452" MaxHeight="452"
+        FontSize="16" FontFamily="/DrawablesGenerator;component/Resources/#Hobo">
     <Grid>
-        
+        <!-- Background -->
+        <Grid.Background>
+            <ImageBrush ImageSource="Resources/Ice.png" Stretch="None" TileMode="FlipXY" Viewport="0,0,1840,1080" ViewportUnits="Absolute" AlignmentX="Left" AlignmentY="Top"/>
+        </Grid.Background>
+        <!-- /Background -->
+
+        <!-- Preview -->
+        <Image x:Name="imgPreviewBackground" Margin="10,10,0,-64" Stretch="Uniform"  RenderOptions.BitmapScalingMode="NearestNeighbor" VerticalAlignment="Top" HorizontalAlignment="Left" Height="373" Width="394" Source="Resources/NaturalSmall.png">
+            <Image.Effect>
+                <DropShadowEffect BlurRadius="5" Color="Black" Opacity="1" ShadowDepth="0.5"/>
+            </Image.Effect>
+        </Image>
+        <Image x:Name="imgPreviewCharacter" Margin="124,287,0,0" Stretch="None"  RenderOptions.BitmapScalingMode="NearestNeighbor" VerticalAlignment="Top" HorizontalAlignment="Left" Source="Resources/previewCharSmall.png"/>
+        <Border x:Name="brdPreview"  BorderBrush="Transparent" ClipToBounds="True"  BorderThickness="0" HorizontalAlignment="Left" Margin="10,10,0,-64" VerticalAlignment="Top" Height="373" Width="394" MouseDown="Preview_MouseDown" Background="Transparent" MouseMove="Preview_MouseMove" MouseUp="Preview_MouseUp">
+            <Grid>
+                <Image x:Name="imgPreview" Stretch="Uniform"  RenderOptions.BitmapScalingMode="NearestNeighbor" HorizontalAlignment="Left" Width="0" Height="0" VerticalAlignment="Top" Margin="0,0,0,0" MouseDown="Preview_MouseDown" MouseMove="Preview_MouseMove" MouseUp="Preview_MouseUp"/>
+                <Grid x:Name="grdFirePosition" Visibility="Hidden" HorizontalAlignment="Left" Height="14" VerticalAlignment="Top" Width="14">
+                    <Rectangle x:Name="rectFirePositionHorizontal" Fill="Red" HorizontalAlignment="Left" Height="2" Margin="0,6,0,0" Stroke="Black" VerticalAlignment="Top" Width="14" StrokeThickness="0"/>
+                    <Rectangle x:Name="rectFirePositionVertical" Fill="Red" HorizontalAlignment="Left" Height="14" Margin="6,0,0,0" Stroke="Black" VerticalAlignment="Top" Width="2" StrokeThickness="0"/>
+                </Grid>
+            </Grid>
+        </Border>
+        <Image x:Name="imgArmFrame" Source="Resources\normal.png"  Height="50" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" Width="46" Canvas.Left="132" Canvas.Top="163" RenderTransformOrigin="0.41304347826086956521739130434783,0.50" Margin="122,287,0,0" MouseDown="Preview_MouseDown" MouseMove="Preview_MouseMove" MouseUp="Preview_MouseUp" HorizontalAlignment="Left" VerticalAlignment="Top" >
+            <Image.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform x:Name="armFrameRotateTransform" Angle="-90"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Image.RenderTransform>
+        </Image>
+        <!-- /Preview -->
+
+        <!-- Theme -->
+        <Label x:Name="lblBackground" Content="Background:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="236,384,0,0"/>
+
+        <Border x:Name="brdThemeBlack" BorderBrush="#FF131313" BorderThickness="1" HorizontalAlignment="Left" Height="16" Margin="388,388,0,0" VerticalAlignment="Top" Width="16" CornerRadius="4" Background="#FF272727" MouseLeftButtonDown="ThemeBlack_MouseLeftButtonDown">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="5" Color="Black" Opacity="1" ShadowDepth="0.5" />
+            </Border.Effect>
+        </Border>
+        <Border x:Name="brdThemeWhite" BorderBrush="#FFE8E8E8" BorderThickness="1" HorizontalAlignment="Left" Height="16" Margin="367,388,0,0" VerticalAlignment="Top" Width="16" CornerRadius="4" Background="White" MouseLeftButtonDown="ThemeWhite_MouseLeftButtonDown">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="5" Color="Black" Opacity="1" ShadowDepth="0.5" />
+            </Border.Effect>
+        </Border>
+        <Border x:Name="brdThemeGreen" BorderBrush="#FF1E8500" BorderThickness="1" HorizontalAlignment="Left" Height="16" Margin="346,388,0,0" VerticalAlignment="Top" Width="16" CornerRadius="4" Background="#FF27AA00" MouseLeftButtonDown="ThemeGreen_MouseLeftButtonDown">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="5" Color="Black" Opacity="1" ShadowDepth="0.5" />
+            </Border.Effect>
+        </Border>
+        <!-- /Theme-->
+
+        <!-- Select Image -->
+        <Grid Height="21" Margin="417,18,13,0" VerticalAlignment="Top">
+            <Button x:Name="btnSelectImage" Content="Select Image" HorizontalAlignment="Left" VerticalAlignment="Top" Width="118" Height="21" Click="SelectImage_Click" ToolTip="Select the image file to create drawables from.">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                        <GradientStop Color="#FFD3D3DB" Offset="0"/>
+                        <GradientStop Color="#FFEDEBEE" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+            <TextBox Margin="123,0,0,0" x:Name="tbxImage" Height="21" TextWrapping="NoWrap" Text="" VerticalAlignment="Top" IsReadOnly="True" AllowDrop="False"/>
+        </Grid>
+        <!-- /Select Image -->
+
+        <!-- Select Hand Position-->
+        <Border Height="57" VerticalAlignment="Top" HorizontalAlignment="Left" Width="276"  Margin="417,44,0,0">
+            <Grid>
+                <Label x:Name="lblHandPosition" Content="Hand Position:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <TextBox x:Name="tbxHandX" Height="18" Margin="39,31,0,0" TextWrapping="NoWrap" Text="0" VerticalAlignment="Top" AllowDrop="False" TextAlignment="Right" TextChanged="HandX_TextChanged" HorizontalAlignment="Left" PreviewKeyDown="Hand_PreviewKeyDown" Width="101" MaxLines="1" MaxLength="4" LostFocus="Hand_LostFocus" ToolTip="The horizontal handPosition value for the image in the current position."/>
+                <TextBox x:Name="tbxHandY" Height="18" Margin="174,31,0,0" TextWrapping="NoWrap" Text="0" VerticalAlignment="Top" AllowDrop="False" TextAlignment="Right" TextChanged="HandY_TextChanged" PreviewKeyDown="Hand_PreviewKeyDown" HorizontalAlignment="Left" Width="102" MaxLength="4" MaxLines="1" LostFocus="Hand_LostFocus" ToolTip="The veritcal handPosition value for the image in the current position."/>
+                <Label x:Name="lblHandPositionX" Content="X:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,27,0,0"/>
+                <Label x:Name="lblHandPositionY" Content="Y:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="145,27,0,0"/>
+            </Grid>
+        </Border>
+        <!-- /Select Hand Position-->
+
+        <!-- Select Generate Option -->
+        <Border Height="305" VerticalAlignment="Top" HorizontalAlignment="Left" Width="279"   Margin="417,106,0,0">
+            <Grid>
+                <Label x:Name="lblGenerate" Content="Generate:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,-53,0"/>
+                <Button x:Name="btnPlainText" Content="Plain Text" HorizontalAlignment="Left" VerticalAlignment="Top" Width="259" Height="21" Margin="10,32,0,0" ToolTip="Generates the drawables and positioning code, and displays it as plain text.&#x0a;Requires an image to be selected." Click="PlainText_Click">
+                    <Button.Background>
+                        <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                            <GradientStop Color="#FFD3D3DB" Offset="0"/>
+                            <GradientStop Color="#FFEDEBEE" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                </Button>
+                <Button x:Name="btnCommand" Content="Spawn Command" HorizontalAlignment="Left" VerticalAlignment="Top" Width="259" Height="21" Margin="10,58,0,0" ToolTip="Generates the drawables and positioning code, and applies them to a spawnitem command using a template file.&#x0a;Requires an image to be selected." Click="Command_Click">
+                    <Button.Background>
+                        <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                            <GradientStop Color="#FFD3D3DB" Offset="0"/>
+                            <GradientStop Color="#FFEDEBEE" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                </Button>
+                <Button x:Name="btnStarCheatExport" Content="StarCheat Export" HorizontalAlignment="Left" VerticalAlignment="Top" Width="259" Height="21" Margin="10,84,0,0" ToolTip="Generates the drawables and positioning code, and applies them to a template file.&#x0a;Requires an image to be selected." Click="StarCheatExport_Click">
+                    <Button.Background>
+                        <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                            <GradientStop Color="#FFD3D3DB" Offset="0"/>
+                            <GradientStop Color="#FFEDEBEE" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                </Button>
+            </Grid>
+        </Border>
+        <!-- /Select Generate Option -->
+
     </Grid>
 </Window>
