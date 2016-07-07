@@ -420,7 +420,7 @@ namespace DrawablesGenerator
                     return;
 
                 DrawableOutput dt = data.GenerateDrawables(Convert.ToDouble(tbxHandX.Text) / 8d, Convert.ToDouble(tbxHandY.Text) / 8d);
-                File.WriteAllText(sfd.FileName, dt.GenerateText());
+                File.WriteAllText(sfd.FileName, dt.GenerateExport());
                 Process.Start("explorer.exe", @"/select, " + @"""" + sfd.FileName + @"""");
             }
             catch (DrawableException exc)
