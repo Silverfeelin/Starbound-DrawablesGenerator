@@ -82,8 +82,8 @@
         <Border Height="57" VerticalAlignment="Top" HorizontalAlignment="Left" Width="276"  Margin="417,44,0,0">
             <Grid>
                 <Label x:Name="lblHandPosition" Content="Hand Position:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <TextBox x:Name="tbxHandX" Height="18" Margin="39,31,0,0" TextWrapping="NoWrap" Text="0" VerticalAlignment="Top" AllowDrop="False" TextAlignment="Right" TextChanged="HandX_TextChanged" HorizontalAlignment="Left" PreviewKeyDown="Hand_PreviewKeyDown" Width="101" MaxLines="1" MaxLength="4" LostFocus="Hand_LostFocus" ToolTip="The horizontal handPosition value for the image in the current position."/>
-                <TextBox x:Name="tbxHandY" Height="18" Margin="174,31,0,0" TextWrapping="NoWrap" Text="0" VerticalAlignment="Top" AllowDrop="False" TextAlignment="Right" TextChanged="HandY_TextChanged" PreviewKeyDown="Hand_PreviewKeyDown" HorizontalAlignment="Left" Width="102" MaxLength="4" MaxLines="1" LostFocus="Hand_LostFocus" ToolTip="The veritcal handPosition value for the image in the current position."/>
+                <TextBox x:Name="tbxHandX" Height="18" Margin="39,31,0,0" TextWrapping="NoWrap" Text="0" VerticalAlignment="Top" AllowDrop="False" TextAlignment="Right" TextChanged="HandX_TextChanged" HorizontalAlignment="Left" PreviewKeyDown="Hand_PreviewKeyDown" Width="101" MaxLines="1" MaxLength="4" LostFocus="Hand_LostFocus" ToolTip="The horizontal hand position, in pixels, for the image in the current position."/>
+                <TextBox x:Name="tbxHandY" Height="18" Margin="174,31,0,0" TextWrapping="NoWrap" Text="0" VerticalAlignment="Top" AllowDrop="False" TextAlignment="Right" TextChanged="HandY_TextChanged" PreviewKeyDown="Hand_PreviewKeyDown" HorizontalAlignment="Left" Width="102" MaxLength="4" MaxLines="1" LostFocus="Hand_LostFocus" ToolTip="The vertical hand position, in pixels, for the image in the current position."/>
                 <Label x:Name="lblHandPositionX" Content="X:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,27,0,0"/>
                 <Label x:Name="lblHandPositionY" Content="Y:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="145,27,0,0"/>
             </Grid>
@@ -94,7 +94,7 @@
         <Border Height="305" VerticalAlignment="Top" HorizontalAlignment="Left" Width="279"   Margin="417,106,0,0">
             <Grid>
                 <Label x:Name="lblGenerate" Content="Generate:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,-53,0"/>
-                <Button x:Name="btnPlainText" Content="Plain Text" HorizontalAlignment="Left" VerticalAlignment="Top" Width="259" Height="21" Margin="10,32,0,0" ToolTip="Generates the drawables and positioning code, and displays it as plain text.&#x0a;Requires an image to be selected." Click="PlainText_Click">
+                <Button x:Name="btnPlainText" Content="Plain Text" HorizontalAlignment="Left" VerticalAlignment="Top" Width="259" Height="21" Margin="10,32,0,0" ToolTip="Generates the drawables and positioning code, and displays it as plain text." Click="PlainText_Click">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
                             <GradientStop Color="#FFD3D3DB" Offset="0"/>
@@ -102,7 +102,7 @@
                         </LinearGradientBrush>
                     </Button.Background>
                 </Button>
-                <Button x:Name="btnCommand" Content="Spawn Command" HorizontalAlignment="Left" VerticalAlignment="Top" Width="259" Height="21" Margin="10,58,0,0" ToolTip="Generates the drawables and positioning code, and applies them to a spawnitem command using a template file.&#x0a;Requires an image to be selected." Click="Command_Click">
+                <Button x:Name="btnCommand" Content="Spawn Command" HorizontalAlignment="Left" VerticalAlignment="Top" Width="259" Height="21" Margin="10,58,0,0" ToolTip="Generates the drawables and positioning code, and applies them to a spawnitem command using a template file." Click="Command_Click">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
                             <GradientStop Color="#FFD3D3DB" Offset="0"/>
@@ -110,7 +110,15 @@
                         </LinearGradientBrush>
                     </Button.Background>
                 </Button>
-                <Button x:Name="btnStarCheatExport" Content="StarCheat Export" HorizontalAlignment="Left" VerticalAlignment="Top" Width="259" Height="21" Margin="10,84,0,0" ToolTip="Generates the drawables and positioning code, and applies them to a template file.&#x0a;Requires an image to be selected." Click="StarCheatExport_Click">
+                <Button x:Name="btnStarCheatExport" Content="StarCheat Export" HorizontalAlignment="Left" VerticalAlignment="Top" Width="259" Height="21" Margin="10,84,0,0" ToolTip="Generates the drawables and positioning code, and applies them to a template file." Click="StarCheatExport_Click">
+                    <Button.Background>
+                        <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                            <GradientStop Color="#FFD3D3DB" Offset="0"/>
+                            <GradientStop Color="#FFEDEBEE" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                </Button>
+                <Button x:Name="btnSingleTextureDirectives" Content="Single Texture Directives" HorizontalAlignment="Left" VerticalAlignment="Top" Width="259" Height="21" Margin="10,110,0,0" ToolTip="Generates directives for a single texture, for use outside of active items.&#x0a;The default scale is based on a 64x64 source image, and may need adjustment ('?scalenearest=1').&#x0a;Note: due to the way this feature works, the drawable can not be positioned automatically." Click="SingleTextureDirectives_Click">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
                             <GradientStop Color="#FFD3D3DB" Offset="0"/>

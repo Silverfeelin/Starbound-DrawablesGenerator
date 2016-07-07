@@ -234,9 +234,12 @@ namespace DrawablesGenerator
         /// <summary>
         /// Generates a <see cref="DrawableOutput"/> instance containing all <see cref="Drawable"/> instances needed to form <see cref="selectedImage"/>.
         /// </summary>
+        /// <param name="blockOffsetX"></param>
+        /// <param name="blockOffsetY"></param>
+        /// <param name="replaceAll">Value indicating whether to add a replace directive for transparent pixels. Signs with no (semi)opaque pixels are still ignored.</param>
         /// <returns>DrawableOutput containing the drawable data.</returns>
         /// <exception cref="DrawableException">Thrown when no valid image has been selected.</exception>
-        public DrawableOutput GenerateDrawables(double blockOffsetX, double blockOffsetY)
+        public DrawableOutput GenerateDrawables(double blockOffsetX, double blockOffsetY, bool replaceBlank = false)
         {
             if (!this.ValidImage)
                 throw new DrawableException("Please select a valid image before creating Drawables.");
@@ -288,21 +291,32 @@ namespace DrawablesGenerator
                     {
                         for (int j = 0; j < 8; j++)
                         {
-                            imagePixel.Y++;
                             // Pixel falls within template but is outside of the supplied image.
-                            if (imagePixel.X > b.Width - 1 || imagePixel.Y - 1 > b.Height - 1)
+                            if ((imagePixel.X > b.Width - 1 || imagePixel.Y > b.Height - 1))
+                            {
+                                imagePixel.Y++;
                                 continue;
-
-                            Color imageColor = b.GetPixel(Convert.ToInt32(imagePixel.X), Convert.ToInt32(imagePixel.Y - 1));
+                            }
+                            
+                            Color imageColor = b.GetPixel(Convert.ToInt32(imagePixel.X), Convert.ToInt32(imagePixel.Y));
 
                             // Pixel color is invisible.
-                            if (imageColor.A < 1)
+                            if (imageColor.A < 1 && !replaceBlank)
+                            {
+                                imagePixel.Y++;
                                 continue;
+                            }
+                            else if (replaceBlank && imageColor.ToArgb() == Color.White.ToArgb())
+                                imageColor = Color.FromArgb(255, 254, 254, 254);
 
                             Color templateColor = template.GetPixel(i, j);
 
                             directives += string.Format(";{0}={1}", ColorToRGBAHexString(templateColor), ColorToRGBAHexString(imageColor));
-                            containsPixels = true;
+
+                            if (imageColor.A > 1)
+                                containsPixels = true;
+
+                            imagePixel.Y++;
                         }
 
                         imagePixel.X++;
@@ -317,7 +331,7 @@ namespace DrawablesGenerator
                 }
             }
 
-            return new DrawableOutput(drawables, blockOffsetX, blockOffsetY);
+            return new DrawableOutput(drawables, selectedImage.Width, selectedImage.Height, blockOffsetX, blockOffsetY);
         }
     }
 }

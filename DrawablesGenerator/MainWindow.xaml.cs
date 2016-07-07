@@ -359,7 +359,22 @@ namespace DrawablesGenerator
                 return;
             }
         }
-        
+
+        private void SingleTextureDirectives_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+
+                DrawableOutput dt = data.GenerateDrawables(Convert.ToDouble(tbxHandX.Text) / 8d, Convert.ToDouble(tbxHandY.Text) / 8d, true);
+                (new OutputWindow("Texture and Directives:", dt.GenerateSingleTextureDirectives())).Show();
+            }
+            catch (DrawableException exc)
+            {
+                MessageBox.Show(exc.Message);
+                return;
+            }
+        }
+
         private void StarCheatExport_Click(object sender, RoutedEventArgs e)
         {
             try
