@@ -34,6 +34,7 @@ namespace DrawablesGenerator
                     MessageBox.Show(exc.Message + Environment.NewLine + "The selection has been cleared.");
                 }
 
+                Application.Current.Shutdown();
                 return;
             }
 
