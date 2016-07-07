@@ -56,9 +56,14 @@ namespace DrawablesGenerator
             if (!ofdResult.HasValue || !ofdResult.Value)
                 return;
 
+            SelectImage(ofd.FileName);
+        }
+
+        public void SelectImage(string path)
+        {
             try
             {
-                data.LoadImage(ofd.FileName);
+                data.LoadImage(path);
             }
             catch (ArgumentException)
             {
