@@ -7,6 +7,10 @@ Create multiplayer-compatible drawables for Starbound.
  - [Regular usage](#regular-usage)
  - [Quick drag and drop](#quick-drag-and-drop)
 - [Generation methods](#generation-methods)
+ - [Plain Text](#plain-text)
+ - [Spawn Command](#spawn-command)
+ - [StarCheat Export](#starcheat-export)
+ - [Single Texture Directives](#single-texture-directives)
 - [Planned](#planned)
 - [Potential issues](#potential-issues)
 - [Contributing](#contributing)
@@ -50,3 +54,14 @@ The applications prompts a location to save the output, and then creates a JSON 
 Creates a directives string which can be applied to a single texture (that supports directives), to form the selected image.
 
 If the image you apply these directives to is smaller than 64x64 (in any dimension), you must manually increase the scale found near the start of the output (`?scalenearest=value`).
+
+## Planned
+Nothing yet, feel free to suggest additions or changes!
+
+## Potential issues
+Of course, we can't ignore the amount of data requires to form these images.  
+The main two things to worry about are performance losses and game updates 'patching' this feature (it is an exploit, after all).
+
+## Contributing
+I love suggestions! If you can think of anything to improve this application feel free to leave a suggestion on the discussion thread over at PlayStarbound (link pending).  
+If you're really dedicated, you can also create a pull request and directly contribute to the mod!
