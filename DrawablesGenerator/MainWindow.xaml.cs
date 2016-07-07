@@ -380,6 +380,35 @@ namespace DrawablesGenerator
             }
         }
 
+        private void SelectImage_Drop(object sender, DragEventArgs e)
+        {
+            try
+            {
+                if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                {
+                    string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                    if (files.Length == 1)
+                    {
+                        SelectImage(files[0]);
+                    }
+                }
+            }
+            catch (ArgumentException)
+            {
+                MessageBox.Show("The image could not be loaded. Please try another image.");
+                return;
+            }
+            catch (DrawableException exc)
+            {
+                MessageBox.Show(exc.Message + Environment.NewLine + "The selection has been cleared.");
+                return;
+            }
+            finally
+            {
+                UpdatePreviewImage();
+            }
+        }
+
         private void StarCheatExport_Click(object sender, RoutedEventArgs e)
         {
             try

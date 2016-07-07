@@ -8,7 +8,8 @@
         Title="Drawables Generator"
         MinWidth="714" Width="714" MaxWidth="714"
         MinHeight="452" Height="452" MaxHeight="452"
-        FontSize="16" FontFamily="/DrawablesGenerator;component/Resources/#Hobo">
+        FontSize="16" FontFamily="/DrawablesGenerator;component/Resources/#Hobo"
+        AllowDrop="True" Drop="SelectImage_Drop">
     <Grid>
         <!-- Background -->
         <Grid.Background>
