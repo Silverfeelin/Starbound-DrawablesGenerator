@@ -15,6 +15,9 @@ Create multiplayer-compatible drawables for Starbound.
 - [Potential issues](#potential-issues)
 - [Contributing](#contributing)
 
+![Application](https://raw.githubusercontent.com/Silverfeelin/Drawables-Generator/master/readme/application.png "Application")  
+*Overview of the application*
+
 ## Installation
 * If you haven't already, [download](https://www.microsoft.com/en-us/download/details.aspx?id=30653) and install .NET Framework 4.5.
 * [Download](https://github.com/Silverfeelin/Drawables-Generator/releases) the release for the current version of Starbound.
@@ -54,6 +57,9 @@ The applications prompts a location to save the output, and then creates a JSON 
 Creates a directives string which can be applied to a single texture (that supports directives), to form the selected image.
 
 If the image you apply these directives to is smaller than 64x64 (in any dimension), you must manually increase the scale found near the start of the output (`?scalenearest=value`).
+
+![Output](https://raw.githubusercontent.com/Silverfeelin/Drawables-Generator/master/readme/output.png "Output")  
+*Sample output for the Spawn Command generation method*
 
 ## Planned
 Nothing yet, feel free to suggest additions or changes!
