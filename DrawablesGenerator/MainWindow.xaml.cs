@@ -354,8 +354,7 @@ namespace DrawablesGenerator
         {
             try
             {
-
-                DrawableOutput dt = data.GenerateDrawables(Convert.ToDouble(tbxHandX.Text) / 8d, Convert.ToDouble(tbxHandY.Text) / 8d);
+                DrawableOutput dt = data.GenerateDrawables(Convert.ToDouble(tbxHandX.Text) / 8d, Convert.ToDouble(tbxHandY.Text) / 8d, false, tbxIgnoreColor.Text);
                 (new OutputWindow("Item Configuration:", dt.GenerateText())).Show();
             }
             catch (DrawableException exc)
@@ -370,7 +369,7 @@ namespace DrawablesGenerator
             try
             {
 
-                DrawableOutput dt = data.GenerateDrawables(Convert.ToDouble(tbxHandX.Text) / 8d, Convert.ToDouble(tbxHandY.Text) / 8d, true);
+                DrawableOutput dt = data.GenerateDrawables(Convert.ToDouble(tbxHandX.Text) / 8d, Convert.ToDouble(tbxHandY.Text) / 8d, true, tbxIgnoreColor.Text);
                 (new OutputWindow("Texture and Directives:", dt.GenerateSingleTextureDirectives())).Show();
             }
             catch (DrawableException exc)
@@ -419,7 +418,7 @@ namespace DrawablesGenerator
                 if (!res.HasValue || !res.Value)
                     return;
 
-                DrawableOutput dt = data.GenerateDrawables(Convert.ToDouble(tbxHandX.Text) / 8d, Convert.ToDouble(tbxHandY.Text) / 8d);
+                DrawableOutput dt = data.GenerateDrawables(Convert.ToDouble(tbxHandX.Text) / 8d, Convert.ToDouble(tbxHandY.Text) / 8d, false, tbxIgnoreColor.Text);
                 File.WriteAllText(sfd.FileName, dt.GenerateExport());
                 Process.Start("explorer.exe", @"/select, " + @"""" + sfd.FileName + @"""");
             }
@@ -434,7 +433,7 @@ namespace DrawablesGenerator
         {
             try
             {
-                DrawableOutput dt = data.GenerateDrawables(Convert.ToDouble(tbxHandX.Text) / 8d, Convert.ToDouble(tbxHandY.Text) / 8d);
+                DrawableOutput dt = data.GenerateDrawables(Convert.ToDouble(tbxHandX.Text) / 8d, Convert.ToDouble(tbxHandY.Text) / 8d, false, tbxIgnoreColor.Text);
                 (new OutputWindow("Command:", dt.GenerateCommand())).Show();
             }
             catch (DrawableException exc)

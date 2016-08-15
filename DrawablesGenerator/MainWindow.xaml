@@ -79,8 +79,14 @@
         </Grid>
         <!-- /Select Image -->
 
+        <!-- Ignore Color -->
+        <Grid Height="21" Margin="417,44,13,0" VerticalAlignment="Top">
+            <Label x:Name="lblIgnoreColor" Content="Ignore Color:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,-2,0,-1" ToolTip="Optional hexadecimal color code to ignore. Any pixels matching this color will not show on generated drawables. Note that the preview is not affected by this value."/>
+            <TextBox Margin="123,0,0,0" x:Name="tbxIgnoreColor" Height="21" TextWrapping="NoWrap" Text="" VerticalAlignment="Top" IsReadOnly="False" AllowDrop="True" ToolTip="Optional hexadecimal color code to ignore. Any pixels matching this color will not show on generated drawables. Note that the preview is not affected by this value." MaxLines="1" MaxLength="7"/>
+        </Grid>
+        <!-- /Ignore Color -->
         <!-- Select Hand Position-->
-        <Border Height="57" VerticalAlignment="Top" HorizontalAlignment="Left" Width="276"  Margin="417,44,0,0">
+        <Border Height="57" VerticalAlignment="Top" HorizontalAlignment="Left" Width="276"  Margin="417,70,0,0">
             <Grid>
                 <Label x:Name="lblHandPosition" Content="Hand Position:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 <TextBox x:Name="tbxHandX" Height="18" Margin="39,31,0,0" TextWrapping="NoWrap" Text="0" VerticalAlignment="Top" AllowDrop="False" TextAlignment="Right" TextChanged="HandX_TextChanged" HorizontalAlignment="Left" PreviewKeyDown="Hand_PreviewKeyDown" Width="101" MaxLines="1" MaxLength="4" LostFocus="Hand_LostFocus" ToolTip="The horizontal hand position, in pixels, for the image in the current position."/>
@@ -92,7 +98,7 @@
         <!-- /Select Hand Position-->
 
         <!-- Select Generate Option -->
-        <Border Height="305" VerticalAlignment="Top" HorizontalAlignment="Left" Width="279"   Margin="417,106,0,0">
+        <Border Height="305" VerticalAlignment="Top" HorizontalAlignment="Left" Width="279"   Margin="417,132,0,0">
             <Grid>
                 <Label x:Name="lblGenerate" Content="Generate:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,-53,0"/>
                 <Button x:Name="btnPlainText" Content="Plain Text" HorizontalAlignment="Left" VerticalAlignment="Top" Width="259" Height="21" Margin="10,32,0,0" ToolTip="Generates the drawables and positioning code, and displays it as plain text." Click="PlainText_Click">

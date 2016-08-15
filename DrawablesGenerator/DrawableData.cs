@@ -239,10 +239,26 @@ namespace DrawablesGenerator
         /// <param name="replaceAll">Value indicating whether to add a replace directive for transparent pixels. Signs with no (semi)opaque pixels are still ignored.</param>
         /// <returns>DrawableOutput containing the drawable data.</returns>
         /// <exception cref="DrawableException">Thrown when no valid image has been selected.</exception>
-        public DrawableOutput GenerateDrawables(double blockOffsetX, double blockOffsetY, bool replaceBlank = false)
+        public DrawableOutput GenerateDrawables(double blockOffsetX, double blockOffsetY, bool replaceBlank = false, string ignoreColor = null)
         {
             if (!this.ValidImage)
                 throw new DrawableException("Please select a valid image before creating Drawables.");
+
+            Color ignore = Color.Transparent;
+            if (!string.IsNullOrEmpty(ignoreColor))
+            {
+                if (ignoreColor.IndexOf("#") != 0)
+                    ignoreColor = "#" + ignoreColor;
+
+                try
+                {
+                    ignore = System.Drawing.ColorTranslator.FromHtml(ignoreColor);
+                }
+                catch (Exception exc)
+                {
+                    Console.WriteLine("Value {0} is not a correct hexadecimal color code.", ignoreColor);
+                }
+            }
 
             Bitmap template = new Bitmap(32,8);
             for (int i = 0; i < 32; i++)
@@ -300,8 +316,8 @@ namespace DrawablesGenerator
                             
                             Color imageColor = b.GetPixel(Convert.ToInt32(imagePixel.X), Convert.ToInt32(imagePixel.Y));
 
-                            // Pixel color is invisible.
-                            if (imageColor.A < 1 && !replaceBlank)
+                            // Pixel color is invisible or ignored.
+                            if (imageColor.Equals(ignore) || (imageColor.A < 1 && !replaceBlank))
                             {
                                 imagePixel.Y++;
                                 continue;
