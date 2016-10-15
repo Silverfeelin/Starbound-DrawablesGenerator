@@ -125,7 +125,15 @@
                         </LinearGradientBrush>
                     </Button.Background>
                 </Button>
-                <Button x:Name="btnSingleTextureDirectives" Content="Single Texture Directives" HorizontalAlignment="Left" VerticalAlignment="Top" Width="259" Height="21" Margin="10,110,0,0" ToolTip="Generates directives for a single texture, for use outside of active items.&#x0a;The default scale is based on a 64x64 source image, and may need adjustment ('?scalenearest=1').&#x0a;Note: due to the way this feature works, the drawable can not be positioned automatically." Click="SingleTextureDirectives_Click">
+                <Button x:Name="btnSingleTextureDirectives" Content="Single Texture Directives" HorizontalAlignment="Left" VerticalAlignment="Top" Width="259" Height="21" Margin="10,136,0,0" ToolTip="Generates directives for a single texture, for use outside of active items.&#x0a;The default scale is based on a 64x64 source image, and may need adjustment ('?scalenearest=1').&#x0a;Note: due to the way this feature works, the drawable can not be positioned automatically." Click="SingleTextureDirectives_Click">
+                    <Button.Background>
+                        <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                            <GradientStop Color="#FFD3D3DB" Offset="0"/>
+                            <GradientStop Color="#FFEDEBEE" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                </Button>
+                <Button x:Name="btnSingleLineStarCheat" Content="Single Line StarCheat Code" HorizontalAlignment="Left" VerticalAlignment="Top" Width="259" Height="21" Margin="10,110,0,0" ToolTip="Generates the drawables and positioning code, and applies them to a template file.&#x0a;The results are copied to your clipboard." Click="SingleLineStarCheatExport_Click">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
                             <GradientStop Color="#FFD3D3DB" Offset="0"/>

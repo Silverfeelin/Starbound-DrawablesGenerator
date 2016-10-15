@@ -77,14 +77,14 @@ namespace DrawablesGenerator
             return dir;
         }
 
-        public string GenerateExport()
+        public string GenerateExport(Newtonsoft.Json.Formatting formatting = Newtonsoft.Json.Formatting.Indented)
         {
             JObject obj = new JObject();
             obj["count"] = 1;
             obj["name"] = "teslastaff";
             obj["parameters"] = JObject.Parse(GenerateText());
 
-            return obj.ToString(Newtonsoft.Json.Formatting.Indented);
+            return obj.ToString(formatting);
         }
     }
 }

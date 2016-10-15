@@ -429,6 +429,21 @@ namespace DrawablesGenerator
             }
         }
 
+        private void SingleLineStarCheatExport_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                DrawableOutput dt = data.GenerateDrawables(Convert.ToDouble(tbxHandX.Text) / 8d, Convert.ToDouble(tbxHandY.Text) / 8d, false, tbxIgnoreColor.Text);
+                Clipboard.SetText(dt.GenerateExport(Newtonsoft.Json.Formatting.None));
+                MessageBox.Show("The results have been copied to your clipboard!");
+            }
+            catch (DrawableException exc)
+            {
+                MessageBox.Show(exc.Message);
+                return;
+            }
+        }
+
         private void Command_Click(object sender, RoutedEventArgs e)
         {
             try
