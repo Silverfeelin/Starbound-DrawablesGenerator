@@ -74,6 +74,8 @@ namespace DrawablesGenerator
                 dir += string.Format("?blendmult={0};{1};{2}{3}", item.Texture, -item.PixelX, -item.PixelY, item.Directives);
             }
 
+            dir += "?replace;ffffffff=00000000";
+
             return dir;
         }
 
