@@ -12,7 +12,7 @@
         AllowDrop="True" Drop="SelectImage_Drop">
     <Grid>
         <!-- NewLine Character: &#x0a; -->
-        
+
         <!-- Background -->
         <Grid.Background>
             <ImageBrush ImageSource="Resources/Ice.png" Stretch="None" TileMode="FlipXY" Viewport="0,0,1840,1080" ViewportUnits="Absolute" AlignmentX="Left" AlignmentY="Top"/>
@@ -128,6 +128,7 @@
                     <RowDefinition MaxHeight="29"/>
                     <RowDefinition MaxHeight="26"/>
                     <RowDefinition MaxHeight="26"/>
+                    <RowDefinition MaxHeight="26"/>
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" x:Name="lblGenerate" Content="Generate:" HorizontalAlignment="Left" VerticalAlignment="Top"
                        ToolTip="Generation methods. Hover over an option to view specific details."/>
@@ -157,6 +158,10 @@
                         </LinearGradientBrush>
                     </Button.Background>
                 </Button>
+                <Label Grid.Row="4" x:Name="lblSourceImageSize" Content="Source Image Size:" HorizontalAlignment="Left" VerticalAlignment="Top"
+                       ToolTip="The biggest dimension of the source image you're applying the single texture directives to.&#x0a;This value is only used when generating 'Single Texture Directives'.&#x0a;Example: When applying a drawable to a 16x8 image, you should use the value 16." Margin="10,0,0,0" Width="163"/>
+                <TextBox Grid.Row="4" x:Name="tbxSourceImageSize" Height="18" TextWrapping="NoWrap" Text="64" VerticalAlignment="Top" AllowDrop="False" TextAlignment="Right" MaxLines="1" MaxLength="6"
+                         ToolTip="The biggest dimension of the source image you're applying the single texture directives to.&#x0a;This value is only used when generating 'Single Texture Directives'.&#x0a;Example: When applying a drawable to a 16x8 image, you should use the value 16." Margin="178,4,10,0"/>
             </Grid>
         </Border>
         <!-- /Select Generate Option -->

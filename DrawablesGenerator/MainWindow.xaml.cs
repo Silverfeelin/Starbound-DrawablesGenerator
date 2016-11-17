@@ -435,7 +435,10 @@ namespace DrawablesGeneratorTool
                 generator.ReplaceWhite = true;
 
                 DrawablesOutput output = generator.Generate();
-                (new OutputWindow("Single Texture Directives:", DrawableUtilities.GenerateSingleTextureDirectives(output))).Show();
+
+                int j = 64;
+                int.TryParse(tbxSourceImageSize.Text, out j);
+                (new OutputWindow("Single Texture Directives:", DrawableUtilities.GenerateSingleTextureDirectives(output, j))).Show();
             }
             catch (FormatException)
             {
