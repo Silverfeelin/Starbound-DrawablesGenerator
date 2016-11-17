@@ -24,7 +24,8 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <Button x:Name="btnJoin" Content="Toggle Format" HorizontalAlignment="Right" VerticalAlignment="Top" Height="21" Margin="0,10,158,0" Click="ToggleFormat_Click" Width="126">
+        <Button x:Name="btnJoin" Content="Toggle Format" HorizontalAlignment="Right" VerticalAlignment="Top" Height="21" Margin="0,10,158,0" Click="ToggleFormat_Click" Width="126"
+                ToolTip="Toggles formatting for the generated code. Overwrites changes made to the text below.">
             <Button.Background>
                 <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
                     <GradientStop Color="#FFD3D3DB" Offset="0"/>
