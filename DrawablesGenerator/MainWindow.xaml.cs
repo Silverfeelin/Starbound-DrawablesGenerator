@@ -1,23 +1,12 @@
 ﻿using Microsoft.Win32;
+using Silverfeelin.StarboundDrawables;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace DrawablesGenerator
+namespace DrawablesGeneratorTool
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -28,14 +17,19 @@ namespace DrawablesGenerator
             PREVIEW_MARGIN_LEFT = 153,
             PREVIEW_MARGIN_TOP = 306;
 
-        private DrawableData data;
+        private BitmapImage previewImage = null;
+        private string imagePath = null;
 
         public MainWindow()
         {
             InitializeComponent();
-            data = new DrawableData();
 
-            this.UpdatePreviewImage();
+            //this.UpdatePreviewImage();
+        }
+
+        public MainWindow(string imagePath) : this()
+        {
+            this.SelectImage(imagePath);
         }
 
         #region Select Image
@@ -59,16 +53,46 @@ namespace DrawablesGenerator
             SelectImage(ofd.FileName);
         }
 
-        public void SelectImage(string path)
+        /// <summary>
+        /// Event handler for dropping a file onto the application. Attempts to select it as an image.
+        /// <see cref="SelectImage(string)"/>
+        /// </summary>
+        /// <param name="sender">The source of the event</param>
+        /// <param name="e">The <see cref="DragEventArgs"/> instance containing event data, including the dropped item(s).</param>
+        private void SelectImage_Drop(object sender, DragEventArgs e)
         {
             try
             {
-                data.LoadImage(path);
+                if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                {
+                    string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                    if (files.Length == 1)
+                    {
+                        SelectImage(files[0]);
+                    }
+                }
             }
             catch (ArgumentException)
             {
                 MessageBox.Show("The image could not be loaded. Please try another image.");
                 return;
+            }
+            catch (DrawableException exc)
+            {
+                MessageBox.Show(exc.Message + Environment.NewLine + "The selection has been cleared.");
+                return;
+            }
+            finally
+            {
+                UpdatePreviewImage();
+            }
+        }
+
+        public void SelectImage(string path)
+        {
+            try
+            {
+                imagePath = path;
             }
             catch (DrawableException exc)
             {
@@ -90,17 +114,11 @@ namespace DrawablesGenerator
             tbxHandX.Text = "0";
             tbxHandY.Text = "0";
 
-            if (!data.ValidImage)
-            {
-                // Remove image.
-                imgPreview.Source = null;
-
-                tbxImage.Text = string.Empty;
-            }
-            else
+            if (imagePath != null)
             {
                 // Display image.
-                BitmapImage bi = new BitmapImage(new Uri(data.SelectedImagePath));
+                BitmapImage bi = new BitmapImage(new Uri(imagePath));
+                previewImage = bi;
                 imgPreview.Source = bi;
                 imgPreview.Width = bi.PixelWidth * 2;
                 imgPreview.Height = bi.PixelHeight * 2;
@@ -110,7 +128,29 @@ namespace DrawablesGenerator
                 margin.Top = PREVIEW_MARGIN_TOP - imgPreview.Height;
                 imgPreview.Margin = margin;
 
-                tbxImage.Text = data.SelectedImagePath;
+                tbxImage.Text = imagePath;
+            }
+
+            bool clear = false;
+            if (previewImage != null)
+            {
+                int pixels = previewImage.PixelWidth * previewImage.PixelHeight;
+                if (pixels > DrawablesGenerator.PixelLimit)
+                {
+                    clear = true;
+                    MessageBox.Show("The image (" + previewImage.PixelWidth + "x" + previewImage.PixelHeight + "=" + pixels + ") exceeds the limit of " + DrawablesGenerator.PixelLimit + " total pixels. Your selection will be cleared.");
+                }
+            }
+            else if (imagePath == null)
+                clear = true;
+
+            if (clear)
+            {
+                // Remove image.
+                imgPreview.Source = null;
+                previewImage = null;
+
+                tbxImage.Text = string.Empty;
             }
         }
 
@@ -137,7 +177,8 @@ namespace DrawablesGenerator
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void Preview_MouseMove(object sender, MouseEventArgs e)
         {
-            if (data.ValidImage && brdPreview.IsMouseCaptured)
+            // TODO: Change generator.Image to self contained value.
+            if (previewImage != null && brdPreview.IsMouseCaptured)
             {
                 var pos = e.GetPosition(brdPreview);
                 Thickness margin = new Thickness(pos.X - (imgPreview.Width / 2), pos.Y - (imgPreview.Height / 2), 0, 0);
@@ -244,11 +285,11 @@ namespace DrawablesGenerator
                 return;
             }
 
-            e.Handled = !DrawableData.IsNumber(tbx.Text);
+            e.Handled = !DrawableUtilities.IsNumber(tbx.Text);
 
             if (e.Handled)
             {
-                int index = DrawableData.Clamp(tbx.CaretIndex - 1, 0, tbx.Text.Length - 1);
+                int index = DrawableUtilities.Clamp(tbx.CaretIndex - 1, 0, tbx.Text.Length - 1);
                 tbx.Text = this.oldTbxHandX;
                 tbx.CaretIndex = index;
             }
@@ -282,11 +323,11 @@ namespace DrawablesGenerator
                 return;
             }
 
-            e.Handled = !DrawableData.IsNumber(tbx.Text);
+            e.Handled = !DrawableUtilities.IsNumber(tbx.Text);
 
             if (e.Handled)
             {
-                int index = DrawableData.Clamp(tbx.CaretIndex - 1, 0, tbx.Text.Length - 1);
+                int index = DrawableUtilities.Clamp(tbx.CaretIndex - 1, 0, tbx.Text.Length - 1);
                 tbx.Text = this.oldTbxHandY;
                 tbx.CaretIndex = index;
             }
@@ -354,8 +395,27 @@ namespace DrawablesGenerator
         {
             try
             {
-                DrawableOutput dt = data.GenerateDrawables(Convert.ToDouble(tbxHandX.Text) / 8d, Convert.ToDouble(tbxHandY.Text) / 8d, false, tbxIgnoreColor.Text);
-                (new OutputWindow("Item Configuration:", dt.GenerateText())).Show();
+                DrawablesGenerator generator = new DrawablesGenerator(imagePath);
+
+                generator = DrawableUtilities.SetUpGenerator(generator, tbxHandX.Text, tbxHandY.Text, tbxIgnoreColor.Text);
+                generator.ReplaceWhite = true;
+
+                DrawablesOutput output = generator.Generate();
+                (new OutputWindow("Item Descriptor (Export):", (GetExporter(output)).GetDescriptor(chkAddWeaponGroup.IsChecked.HasValue && chkAddWeaponGroup.IsChecked.Value ? "weapon" : null))).Show();
+            }
+            catch (NotImplementedException exc)
+            {
+                MessageBox.Show(exc.Message);
+                return;
+            }
+            catch (ArgumentNullException)
+            {
+                MessageBox.Show("Argument may not be null. Did you select a valid image?");
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Could not convert hand offsets to numbers.");
+                return;
             }
             catch (DrawableException exc)
             {
@@ -368,9 +428,22 @@ namespace DrawablesGenerator
         {
             try
             {
+                DrawablesGenerator generator = new DrawablesGenerator(imagePath);
 
-                DrawableOutput dt = data.GenerateDrawables(Convert.ToDouble(tbxHandX.Text) / 8d, Convert.ToDouble(tbxHandY.Text) / 8d, true, tbxIgnoreColor.Text);
-                (new OutputWindow("Texture and Directives:", dt.GenerateSingleTextureDirectives())).Show();
+                generator = DrawableUtilities.SetUpGenerator(generator, tbxHandX.Text, tbxHandY.Text, tbxIgnoreColor.Text);
+                generator.ReplaceBlank = true;
+                generator.ReplaceWhite = true;
+
+                DrawablesOutput output = generator.Generate();
+                (new OutputWindow("Single Texture Directives:", DrawableUtilities.GenerateSingleTextureDirectives(output))).Show();
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Invalid format. Did you provide a correct ignore color code? (hexadecimal RRGGBB or RRGGBBAA)");
+            }
+            catch (ArgumentNullException)
+            {
+                MessageBox.Show("Argument may not be null. Did you select a valid image?");
             }
             catch (DrawableException exc)
             {
@@ -378,78 +451,33 @@ namespace DrawablesGenerator
                 return;
             }
         }
-
-        private void SelectImage_Drop(object sender, DragEventArgs e)
-        {
-            try
-            {
-                if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                {
-                    string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                    if (files.Length == 1)
-                    {
-                        SelectImage(files[0]);
-                    }
-                }
-            }
-            catch (ArgumentException)
-            {
-                MessageBox.Show("The image could not be loaded. Please try another image.");
-                return;
-            }
-            catch (DrawableException exc)
-            {
-                MessageBox.Show(exc.Message + Environment.NewLine + "The selection has been cleared.");
-                return;
-            }
-            finally
-            {
-                UpdatePreviewImage();
-            }
-        }
-
-        private void StarCheatExport_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                SaveFileDialog sfd = new SaveFileDialog();
-                sfd.Filter = "JSON File|*.json|Any File|*.*";
-                bool? res = sfd.ShowDialog();
-                if (!res.HasValue || !res.Value)
-                    return;
-
-                DrawableOutput dt = data.GenerateDrawables(Convert.ToDouble(tbxHandX.Text) / 8d, Convert.ToDouble(tbxHandY.Text) / 8d, false, tbxIgnoreColor.Text);
-                File.WriteAllText(sfd.FileName, dt.GenerateExport());
-                Process.Start("explorer.exe", @"/select, " + @"""" + sfd.FileName + @"""");
-            }
-            catch (DrawableException exc)
-            {
-                MessageBox.Show(exc.Message);
-                return;
-            }
-        }
-
-        private void SingleLineStarCheatExport_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                DrawableOutput dt = data.GenerateDrawables(Convert.ToDouble(tbxHandX.Text) / 8d, Convert.ToDouble(tbxHandY.Text) / 8d, false, tbxIgnoreColor.Text);
-                Clipboard.SetText(dt.GenerateExport(Newtonsoft.Json.Formatting.None));
-                MessageBox.Show("The results have been copied to your clipboard!");
-            }
-            catch (DrawableException exc)
-            {
-                MessageBox.Show(exc.Message);
-                return;
-            }
-        }
-
+        
         private void Command_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                DrawableOutput dt = data.GenerateDrawables(Convert.ToDouble(tbxHandX.Text) / 8d, Convert.ToDouble(tbxHandY.Text) / 8d, false, tbxIgnoreColor.Text);
-                (new OutputWindow("Command:", dt.GenerateCommand())).Show();
+                DrawablesGenerator generator = new DrawablesGenerator(imagePath);
+
+                generator = DrawableUtilities.SetUpGenerator(generator, tbxHandX.Text, tbxHandY.Text, tbxIgnoreColor.Text);
+                generator.ReplaceWhite = true;
+
+                DrawablesOutput output = generator.Generate();
+
+                (new OutputWindow("Item Command:", (GetExporter(output)).GetCommand(chkAddWeaponGroup.IsChecked.HasValue && chkAddWeaponGroup.IsChecked.Value ? "weapon" : null))).Show();
+            }
+            catch (NotImplementedException exc)
+            {
+                MessageBox.Show(exc.Message);
+                return;
+            }
+            catch (ArgumentNullException)
+            {
+                MessageBox.Show("Argument may not be null. Did you select a valid image?");
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Could not convert hand offsets to numbers.");
+                return;
             }
             catch (DrawableException exc)
             {
@@ -459,5 +487,19 @@ namespace DrawablesGenerator
         }
 
         #endregion
+
+        private Exporter GetExporter(DrawablesOutput output)
+        {
+            switch ((string)cbxGenerateType.SelectedValue)
+            {
+                default:
+                case "Common Pistol":
+                    return new PistolExporter(output);
+                case "Common Shortsword":
+                    return new ShortswordExporter(output);
+                case "Tesla Staff":
+                    return new TeslaStaffExporter(output);
+            }
+        }
     }
 }

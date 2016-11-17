@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DrawablesGenerator.Properties {
+namespace DrawablesGeneratorTool.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace DrawablesGenerator.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DrawablesGenerator.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("DrawablesGeneratorTool.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,39 +61,43 @@ namespace DrawablesGenerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {
-        ///  &quot;itemName&quot; : &quot;teslastaff&quot;,
-        ///  &quot;level&quot; : 1,
-        ///  &quot;price&quot; : 1,
-        ///  &quot;maxStack&quot; : 1000,
-        ///  &quot;rarity&quot; : &quot;Essential&quot;,
-        ///  &quot;description&quot; : &quot;An item that has custom drawables applied to it!&quot;,
-        ///  &quot;shortdescription&quot; : &quot;A Custom Item&quot;,
-        ///  &quot;category&quot; : &quot;^orange;Drawable Item^reset;&quot;,
-        ///  &quot;twoHanded&quot; : true,
-        ///  &quot;itemTags&quot; : [&quot;weapon&quot;],
-        ///  &quot;animationParts&quot; : {
-        ///    &quot;staff&quot; : &quot;/assetMissing.png&quot;,
-        ///    &quot;stone&quot; : &quot;/assetMissing.png&quot;,
-        ///	&quot;chargeEffect&quot; : &quot;&quot;
-        ///  },
-        ///  &quot;scripts&quot; : [],
-        ///  &quot;elementalType&quot; : &quot;physical&quot;,
-        ///  &quot;primaryA [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string ActiveItem {
-            get {
-                return ResourceManager.GetString("ActiveItem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap DarkSmall {
             get {
                 object obj = ResourceManager.GetObject("DarkSmall", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///	&quot;animationCustom&quot;: {
+        ///		&quot;animatedParts&quot;: {
+        ///			&quot;parts&quot;: {
+        ///				&quot;butt&quot;: {
+        ///					&quot;properties&quot;: {
+        ///						&quot;image&quot;: &quot;/assetmissing.png&quot;
+        ///					}
+        ///				},
+        ///				&quot;middle&quot;: {
+        ///					&quot;properties&quot;: {
+        ///						&quot;image&quot;: &quot;/assetmissing.png&quot;
+        ///					}
+        ///				},
+        ///				&quot;barrel&quot;: {
+        ///					&quot;properties&quot;: {
+        ///						&quot;image&quot;: &quot;/assetmissing.png&quot;
+        ///					}
+        ///				}
+        ///			}
+        ///		}
+        ///	}
+        ///}.
+        /// </summary>
+        internal static string Gun {
+            get {
+                return ResourceManager.GetString("Gun", resourceCulture);
             }
         }
         
@@ -154,6 +158,58 @@ namespace DrawablesGenerator.Properties {
             get {
                 object obj = ResourceManager.GetObject("previewCharSmall", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///	&quot;animationCustom&quot;: {
+        ///		&quot;animatedParts&quot;: {
+        ///			&quot;parts&quot;: {
+        ///				&quot;blade&quot;: {
+        ///					&quot;properties&quot;: {
+        ///						&quot;image&quot;: &quot;/assetmissing.png&quot;
+        ///					}
+        ///				},
+        ///				&quot;handle&quot;: {
+        ///					&quot;properties&quot;: {
+        ///						&quot;image&quot;: &quot;/assetmissing.png&quot;
+        ///					}
+        ///				}
+        ///			}
+        ///		}
+        ///	}
+        ///}.
+        /// </summary>
+        internal static string Sword {
+            get {
+                return ResourceManager.GetString("Sword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///	&quot;animationCustom&quot;: {
+        ///		&quot;animatedParts&quot;: {
+        ///			&quot;parts&quot;: {
+        ///				&quot;staff&quot;: {
+        ///					&quot;properties&quot;: {
+        ///						&quot;image&quot;: &quot;/assetmissing.png&quot;
+        ///					}
+        ///				},
+        ///				&quot;stone&quot;: {
+        ///					&quot;properties&quot;: {
+        ///						&quot;image&quot;: &quot;/assetmissing.png&quot;
+        ///					}
+        ///				}
+        ///			}
+        ///		}
+        ///	}
+        ///}.
+        /// </summary>
+        internal static string TeslaStaff {
+            get {
+                return ResourceManager.GetString("TeslaStaff", resourceCulture);
             }
         }
     }

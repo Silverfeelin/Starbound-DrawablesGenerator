@@ -1,16 +1,18 @@
-﻿<Window x:Class="DrawablesGenerator.MainWindow"
+﻿<Window x:Class="DrawablesGeneratorTool.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DrawablesGenerator"
+        xmlns:local="clr-namespace:DrawablesGeneratorTool"
         mc:Ignorable="d"
         Title="Drawables Generator"
         MinWidth="714" Width="714" MaxWidth="714"
         MinHeight="452" Height="452" MaxHeight="452"
-        FontSize="16" FontFamily="/DrawablesGenerator;component/Resources/#Hobo"
+        FontSize="16" FontFamily="/DrawablesGeneratorTool;component/Resources/#Hobo"
         AllowDrop="True" Drop="SelectImage_Drop">
     <Grid>
+        <!-- NewLine Character: &#x0a; -->
+        
         <!-- Background -->
         <Grid.Background>
             <ImageBrush ImageSource="Resources/Ice.png" Stretch="None" TileMode="FlipXY" Viewport="0,0,1840,1080" ViewportUnits="Absolute" AlignmentX="Left" AlignmentY="Top"/>
@@ -67,7 +69,8 @@
 
         <!-- Select Image -->
         <Grid Height="21" Margin="417,18,13,0" VerticalAlignment="Top">
-            <Button x:Name="btnSelectImage" Content="Select Image" HorizontalAlignment="Left" VerticalAlignment="Top" Width="118" Height="21" Click="SelectImage_Click" ToolTip="Select the image file to create drawables from.">
+            <Button x:Name="btnSelectImage" Content="Select Image" HorizontalAlignment="Left" VerticalAlignment="Top" Width="118" Height="21" Click="SelectImage_Click"
+                    ToolTip="Select the image file to create drawables from.">
                 <Button.Background>
                     <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
                         <GradientStop Color="#FFD3D3DB" Offset="0"/>
@@ -75,33 +78,61 @@
                     </LinearGradientBrush>
                 </Button.Background>
             </Button>
-            <TextBox Margin="123,0,0,0" x:Name="tbxImage" Height="21" TextWrapping="NoWrap" Text="" VerticalAlignment="Top" IsReadOnly="True" AllowDrop="False"/>
+            <TextBox Margin="123,0,0,0" x:Name="tbxImage" Height="21" TextWrapping="NoWrap" Text="" VerticalAlignment="Top" IsReadOnly="True" AllowDrop="False"
+                     ToolTip="File path to selected image. Click on 'Select Image' to select a different image."/>
         </Grid>
         <!-- /Select Image -->
 
         <!-- Ignore Color -->
         <Grid Height="21" Margin="417,44,13,0" VerticalAlignment="Top">
-            <Label x:Name="lblIgnoreColor" Content="Ignore Color:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,-2,0,-1" ToolTip="Optional hexadecimal color code to ignore. Any pixels matching this color will not show on generated drawables. Note that the preview is not affected by this value."/>
-            <TextBox Margin="123,0,0,0" x:Name="tbxIgnoreColor" Height="21" TextWrapping="NoWrap" Text="" VerticalAlignment="Top" IsReadOnly="False" AllowDrop="True" ToolTip="Optional hexadecimal color code to ignore. Any pixels matching this color will not show on generated drawables. Note that the preview is not affected by this value." MaxLines="1" MaxLength="7"/>
+            <Label x:Name="lblIgnoreColor" Content="Ignore Color:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,-2,0,-1"
+                   ToolTip="Optional hexadecimal color code to ignore, formatted RRGGBB or RRGGBBAA.&#x0a;Any pixels matching this color will not show on generated drawables.&#x0a;Note that the preview is not affected by this value."/>
+            <TextBox Margin="123,0,0,0" x:Name="tbxIgnoreColor" Height="21" TextWrapping="NoWrap" Text="" VerticalAlignment="Top" IsReadOnly="False" AllowDrop="True"
+                     ToolTip="Optional hexadecimal color code to ignore, formatted RRGGBB or RRGGBBAA.&#x0a;Any pixels matching this color will not show on generated drawables.&#x0a;Note that the preview is not affected by this value." MaxLines="1" MaxLength="7"/>
         </Grid>
         <!-- /Ignore Color -->
         <!-- Select Hand Position-->
         <Border Height="57" VerticalAlignment="Top" HorizontalAlignment="Left" Width="276"  Margin="417,70,0,0">
             <Grid>
-                <Label x:Name="lblHandPosition" Content="Hand Position:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <TextBox x:Name="tbxHandX" Height="18" Margin="39,31,0,0" TextWrapping="NoWrap" Text="0" VerticalAlignment="Top" AllowDrop="False" TextAlignment="Right" TextChanged="HandX_TextChanged" HorizontalAlignment="Left" PreviewKeyDown="Hand_PreviewKeyDown" Width="101" MaxLines="1" MaxLength="4" LostFocus="Hand_LostFocus" ToolTip="The horizontal hand position, in pixels, for the image in the current position."/>
-                <TextBox x:Name="tbxHandY" Height="18" Margin="174,31,0,0" TextWrapping="NoWrap" Text="0" VerticalAlignment="Top" AllowDrop="False" TextAlignment="Right" TextChanged="HandY_TextChanged" PreviewKeyDown="Hand_PreviewKeyDown" HorizontalAlignment="Left" Width="102" MaxLength="4" MaxLines="1" LostFocus="Hand_LostFocus" ToolTip="The vertical hand position, in pixels, for the image in the current position."/>
+                <Label x:Name="lblHandPosition" Content="Hand Position:" HorizontalAlignment="Left" VerticalAlignment="Top"
+                       ToolTip="The hand position is used to define the position of the image, relative to the hand.&#x0a;This value isn't used (correctly) by all generation methods."/>
+                <TextBox x:Name="tbxHandX" Height="18" Margin="39,31,0,0" TextWrapping="NoWrap" Text="0" VerticalAlignment="Top" AllowDrop="False" TextAlignment="Right" TextChanged="HandX_TextChanged" HorizontalAlignment="Left" PreviewKeyDown="Hand_PreviewKeyDown" Width="101" MaxLines="1" MaxLength="4" LostFocus="Hand_LostFocus"
+                         ToolTip="The horizontal hand position, in pixels, for the image in the current position.&#x0a;This value isn't used (correctly) by all generation methods."/>
+                <TextBox x:Name="tbxHandY" Height="18" Margin="174,31,0,0" TextWrapping="NoWrap" Text="0" VerticalAlignment="Top" AllowDrop="False" TextAlignment="Right" TextChanged="HandY_TextChanged" PreviewKeyDown="Hand_PreviewKeyDown" HorizontalAlignment="Left" Width="102" MaxLength="4" MaxLines="1" LostFocus="Hand_LostFocus"
+                         ToolTip="The vertical hand position, in pixels, for the image in the current position.&#x0a;This value isn't used (correctly) by all generation methods."/>
                 <Label x:Name="lblHandPositionX" Content="X:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,27,0,0"/>
                 <Label x:Name="lblHandPositionY" Content="Y:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="145,27,0,0"/>
             </Grid>
         </Border>
         <!-- /Select Hand Position-->
 
+        <Label x:Name="lblGenerateType" Content="Template:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="417,124,0,0"
+               ToolTip="The weapon template to use for supported generation methods."/>
+        <ComboBox x:Name="cbxGenerateType" Margin="508,127,13,0" Height="21" VerticalAlignment="Top" SelectedValuePath="Content"
+                  ToolTip="The weapon template to use for supported generation methods.">
+            <ComboBoxItem IsSelected="True">Common Pistol</ComboBoxItem>
+            <ComboBoxItem>Common Shortsword</ComboBoxItem>
+            <ComboBoxItem>Tesla Staff</ComboBoxItem>
+        </ComboBox>
+
+        <Label x:Name="lblAddWeaponGroup" Content="Add 'weapon' group:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="417,151,0,0"
+               ToolTip="Adding the 'weapon' transformation group will make the weapon rotate, move and scale properly.&#x0a;The positioning on the preview will not reflect the right positioning with this option enabled."/>
+        <CheckBox x:Name="chkAddWeaponGroup" HorizontalAlignment="Left" Margin="594,156,0,0" VerticalAlignment="Top"
+                  ToolTip="Adding the 'weapon' transformation group will make the weapon rotate, move and scale properly.&#x0a;The positioning on the preview will not reflect the right positioning with this option enabled."/>
+
         <!-- Select Generate Option -->
-        <Border Height="305" VerticalAlignment="Top" HorizontalAlignment="Left" Width="279"   Margin="417,132,0,0">
+        <Border Height="233" VerticalAlignment="Top" HorizontalAlignment="Left" Width="279"   Margin="417,178,0,0">
             <Grid>
-                <Label x:Name="lblGenerate" Content="Generate:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,-53,0"/>
-                <Button x:Name="btnPlainText" Content="Plain Text" HorizontalAlignment="Left" VerticalAlignment="Top" Width="259" Height="21" Margin="10,32,0,0" ToolTip="Generates the drawables and positioning code, and displays it as plain text." Click="PlainText_Click">
+                <Grid.RowDefinitions>
+                    <RowDefinition MaxHeight="34"/>
+                    <RowDefinition MaxHeight="29"/>
+                    <RowDefinition MaxHeight="26"/>
+                    <RowDefinition MaxHeight="26"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" x:Name="lblGenerate" Content="Generate:" HorizontalAlignment="Left" VerticalAlignment="Top"
+                       ToolTip="Generation methods. Hover over an option to view specific details."/>
+                <Button Grid.Row="1" x:Name="btnPlainText" Content="Item Descriptor" VerticalAlignment="Top" Height="21" Click="PlainText_Click" Margin="10,0"
+                        ToolTip="Generates an item descriptor and displays it in plain text.&#x0a;Uses the selected weapon template.">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
                             <GradientStop Color="#FFD3D3DB" Offset="0"/>
@@ -109,7 +140,8 @@
                         </LinearGradientBrush>
                     </Button.Background>
                 </Button>
-                <Button x:Name="btnCommand" Content="Spawn Command" HorizontalAlignment="Left" VerticalAlignment="Top" Width="259" Height="21" Margin="10,58,0,0" ToolTip="Generates the drawables and positioning code, and applies them to a spawnitem command using a template file." Click="Command_Click">
+                <Button Grid.Row="2" x:Name="btnCommand" Content="Spawn Command" VerticalAlignment="Top" Height="21" Click="Command_Click" Margin="10,0"
+                        ToolTip="Generates item parameters and displays it as a '/spawnitem' command.&#x0a;Uses the selected weapon template.">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
                             <GradientStop Color="#FFD3D3DB" Offset="0"/>
@@ -117,23 +149,7 @@
                         </LinearGradientBrush>
                     </Button.Background>
                 </Button>
-                <Button x:Name="btnStarCheatExport" Content="StarCheat Export" HorizontalAlignment="Left" VerticalAlignment="Top" Width="259" Height="21" Margin="10,84,0,0" ToolTip="Generates the drawables and positioning code, and applies them to a template file." Click="StarCheatExport_Click">
-                    <Button.Background>
-                        <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
-                            <GradientStop Color="#FFD3D3DB" Offset="0"/>
-                            <GradientStop Color="#FFEDEBEE" Offset="1"/>
-                        </LinearGradientBrush>
-                    </Button.Background>
-                </Button>
-                <Button x:Name="btnSingleTextureDirectives" Content="Single Texture Directives" HorizontalAlignment="Left" VerticalAlignment="Top" Width="259" Height="21" Margin="10,136,0,0" ToolTip="Generates directives for a single texture, for use outside of active items.&#x0a;The default scale is based on a 64x64 source image, and may need adjustment ('?scalenearest=1').&#x0a;Note: due to the way this feature works, the drawable can not be positioned automatically." Click="SingleTextureDirectives_Click">
-                    <Button.Background>
-                        <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
-                            <GradientStop Color="#FFD3D3DB" Offset="0"/>
-                            <GradientStop Color="#FFEDEBEE" Offset="1"/>
-                        </LinearGradientBrush>
-                    </Button.Background>
-                </Button>
-                <Button x:Name="btnSingleLineStarCheat" Content="Single Line StarCheat Code" HorizontalAlignment="Left" VerticalAlignment="Top" Width="259" Height="21" Margin="10,110,0,0" ToolTip="Generates the drawables and positioning code, and applies them to a template file.&#x0a;The results are copied to your clipboard." Click="SingleLineStarCheatExport_Click">
+                <Button Grid.Row="3" x:Name="btnSingleTextureDirectives" Content="Single Texture Directives" VerticalAlignment="Top" Height="21" ToolTip="Generates directives for a single texture, for use outside of active items.&#x0a;The default scale is based on a 64x64 source image, and may need adjustment ('?scalenearest=1').&#x0a;Note: due to the way this feature works, the drawable can not be positioned automatically." Click="SingleTextureDirectives_Click" Margin="10,0">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
                             <GradientStop Color="#FFD3D3DB" Offset="0"/>
@@ -144,6 +160,5 @@
             </Grid>
         </Border>
         <!-- /Select Generate Option -->
-
     </Grid>
 </Window>
