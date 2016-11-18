@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json.Linq;
 using Silverfeelin.StarboundDrawables;
 
 namespace DrawablesGeneratorTool
@@ -107,6 +108,24 @@ namespace DrawablesGeneratorTool
             }
 
             return generator;
+        }
+
+        public static JArray GenerateInventoryIcon(DrawablesOutput output)
+        {
+            JArray drawables = new JArray();
+
+            foreach (Drawable item in output.Drawables)
+            {
+                JObject drawable = new JObject();
+                drawable["image"] = item.ResultImage;
+                JArray position = new JArray();
+                position.Add(item.X);
+                position.Add(item.Y);
+                drawable["position"] = position;
+                drawables.Add(drawable);
+            }
+
+            return drawables;
         }
     }
 }

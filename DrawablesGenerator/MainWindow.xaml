@@ -129,6 +129,7 @@
                     <RowDefinition MaxHeight="26"/>
                     <RowDefinition MaxHeight="26"/>
                     <RowDefinition MaxHeight="26"/>
+                    <RowDefinition MaxHeight="26"/>
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" x:Name="lblGenerate" Content="Generate:" HorizontalAlignment="Left" VerticalAlignment="Top"
                        ToolTip="Generation methods. Hover over an option to view specific details."/>
@@ -141,7 +142,16 @@
                         </LinearGradientBrush>
                     </Button.Background>
                 </Button>
-                <Button Grid.Row="2" x:Name="btnCommand" Content="Spawn Command" VerticalAlignment="Top" Height="21" Click="Command_Click" Margin="10,0"
+                <Button Grid.Row="2" x:Name="btnInventoryIcon" Content="Inventory Icon" VerticalAlignment="Top" Height="21" Click="InventoryIcon_Click" Margin="10,0"
+                        ToolTip="Generates an inventory icon and displays it in plain text.&#x0a;Uses the old drawables format.">
+                    <Button.Background>
+                        <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                            <GradientStop Color="#FFD3D3DB" Offset="0"/>
+                            <GradientStop Color="#FFEDEBEE" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                </Button>
+                <Button Grid.Row="3" x:Name="btnCommand" Content="Spawn Command" VerticalAlignment="Top" Height="21" Click="Command_Click" Margin="10,0"
                         ToolTip="Generates item parameters and displays it as a '/spawnitem' command.&#x0a;Uses the selected weapon template.">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
@@ -150,7 +160,7 @@
                         </LinearGradientBrush>
                     </Button.Background>
                 </Button>
-                <Button Grid.Row="3" x:Name="btnSingleTextureDirectives" Content="Single Texture Directives" VerticalAlignment="Top" Height="21" ToolTip="Generates directives for a single texture, for use outside of active items.&#x0a;The default scale is based on a 64x64 source image, and may need adjustment ('?scalenearest=1').&#x0a;Note: due to the way this feature works, the drawable can not be positioned automatically." Click="SingleTextureDirectives_Click" Margin="10,0">
+                <Button Grid.Row="4" x:Name="btnSingleTextureDirectives" Content="Single Texture Directives" VerticalAlignment="Top" Height="21" ToolTip="Generates directives for a single texture, for use outside of active items.&#x0a;The default scale is based on a 64x64 source image, and may need adjustment ('?scalenearest=1').&#x0a;Note: due to the way this feature works, the drawable can not be positioned automatically." Click="SingleTextureDirectives_Click" Margin="10,0">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
                             <GradientStop Color="#FFD3D3DB" Offset="0"/>
@@ -158,9 +168,9 @@
                         </LinearGradientBrush>
                     </Button.Background>
                 </Button>
-                <Label Grid.Row="4" x:Name="lblSourceImageSize" Content="Source Image Size:" HorizontalAlignment="Left" VerticalAlignment="Top"
+                <Label Grid.Row="5" x:Name="lblSourceImageSize" Content="Source Image Size:" HorizontalAlignment="Left" VerticalAlignment="Top"
                        ToolTip="The biggest dimension of the source image you're applying the single texture directives to.&#x0a;This value is only used when generating 'Single Texture Directives'.&#x0a;Example: When applying a drawable to a 16x8 image, you should use the value 16." Margin="10,0,0,0" Width="163"/>
-                <TextBox Grid.Row="4" x:Name="tbxSourceImageSize" Height="18" TextWrapping="NoWrap" Text="64" VerticalAlignment="Top" AllowDrop="False" TextAlignment="Right" MaxLines="1" MaxLength="6"
+                <TextBox Grid.Row="5" x:Name="tbxSourceImageSize" Height="18" TextWrapping="NoWrap" Text="64" VerticalAlignment="Top" AllowDrop="False" TextAlignment="Right" MaxLines="1" MaxLength="6"
                          ToolTip="The biggest dimension of the source image you're applying the single texture directives to.&#x0a;This value is only used when generating 'Single Texture Directives'.&#x0a;Example: When applying a drawable to a 16x8 image, you should use the value 16." Margin="178,4,10,0"/>
             </Grid>
         </Border>

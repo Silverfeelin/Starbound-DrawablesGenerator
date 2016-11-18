@@ -12,10 +12,10 @@ namespace DrawablesGeneratorTool
     public partial class OutputWindow : Window
     {
         private string contentString = null;
-        private JObject contentObject = null;
+        private JToken contentObject = null;
         private bool formatted = true;
 
-        public OutputWindow(string title, JObject content)
+        public OutputWindow(string title, JToken content)
         {
             InitializeComponent();
 

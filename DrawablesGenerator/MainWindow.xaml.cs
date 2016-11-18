@@ -454,7 +454,34 @@ namespace DrawablesGeneratorTool
                 return;
             }
         }
-        
+
+        private void InventoryIcon_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                DrawablesGenerator generator = new DrawablesGenerator(imagePath);
+
+                generator = DrawableUtilities.SetUpGenerator(generator, "0", "0", tbxIgnoreColor.Text);
+
+                DrawablesOutput output = generator.Generate();
+                
+                (new OutputWindow("Inventory Icon:", DrawableUtilities.GenerateInventoryIcon(output))).Show();
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Invalid format. Did you provide a correct ignore color code? (hexadecimal RRGGBB or RRGGBBAA)");
+            }
+            catch (ArgumentNullException)
+            {
+                MessageBox.Show("Argument may not be null. Did you select a valid image?");
+            }
+            catch (DrawableException exc)
+            {
+                MessageBox.Show(exc.Message);
+                return;
+            }
+        }
+
         private void Command_Click(object sender, RoutedEventArgs e)
         {
             try
