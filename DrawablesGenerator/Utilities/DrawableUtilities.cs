@@ -89,6 +89,8 @@ namespace DrawablesGeneratorTool
             generator.OffsetX = Convert.ToInt32(handX) + 1;
             generator.OffsetY = Convert.ToInt32(handY);
 
+            generator.RotateFlipStyle = System.Drawing.RotateFlipType.RotateNoneFlipY;
+
             generator.ReplaceBlank = true;
             generator.ReplaceWhite = true;
 
