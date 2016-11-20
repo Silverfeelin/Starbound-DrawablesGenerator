@@ -67,6 +67,7 @@ namespace DrawablesGeneratorTool
 
             foreach (Drawable item in output.Drawables)
             {
+                if (item == null) continue;
                 JObject part = JObject.Parse("{'properties':{'centered':false,'offset':[0,0]}}");
                 part["properties"]["image"] = item.ResultImage;
                 part["properties"]["offset"][0] = item.BlockX + Math.Round(output.OffsetX / 8d, 3);

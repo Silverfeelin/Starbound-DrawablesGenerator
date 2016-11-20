@@ -65,7 +65,8 @@ namespace DrawablesGeneratorTool
 
             foreach (Drawable drawable in output.Drawables)
             {
-                dir.AppendFormat("?blendmult={0};{1};{2}{3}", drawable.Texture, -drawable.X, -drawable.Y, drawable.Directives);
+                if (drawable != null)
+                    dir.AppendFormat("?blendmult={0};{1};{2}{3}", drawable.Texture, -drawable.X, -drawable.Y, drawable.Directives);
             }
 
             dir.Append("?replace;ffffffff=00000000");
