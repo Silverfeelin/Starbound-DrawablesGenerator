@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using Silverfeelin.StarboundDrawables;
 using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -17,15 +18,36 @@ namespace DrawablesGeneratorTool
             PREVIEW_MARGIN_LEFT = 153,
             PREVIEW_MARGIN_TOP = 306;
 
+        private readonly FileSystemWatcher watcher;
         private BitmapImage previewImage = null;
         private string imagePath = null;
+        private bool warned = false;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            //this.UpdatePreviewImage();
+            watcher = new FileSystemWatcher();
+            watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName;
+            watcher.Changed += Watcher_Changed;
+            watcher.Deleted += Watcher_Deleted;
+            watcher.Renamed += Watcher_Deleted;
         }
+
+        #region File Watcher
+
+        // Update selected image when modified externally.
+        private void Watcher_Deleted(object sender, FileSystemEventArgs e)
+        {
+            Application.Current.Dispatcher.Invoke(new Action(() => { SelectImage(null); }));
+        }
+
+        private void Watcher_Changed(object sender, FileSystemEventArgs e)
+        {
+            Application.Current.Dispatcher.Invoke(new Action(() => { UpdatePreviewImage(); }));
+        }
+
+        #endregion
 
         public MainWindow(string imagePath) : this()
         {
@@ -82,76 +104,86 @@ namespace DrawablesGeneratorTool
                 MessageBox.Show(exc.Message + Environment.NewLine + "The selection has been cleared.");
                 return;
             }
-            finally
-            {
-                UpdatePreviewImage();
-            }
         }
 
         public void SelectImage(string path)
         {
             try
             {
+                if (string.IsNullOrEmpty(path) || !File.Exists(path))
+                    throw new DrawableException("Invalid image selected, or the file no longer exists.");
+
                 imagePath = path;
+                watcher.Path = Path.GetDirectoryName(path);
+                watcher.Filter = Path.GetFileName(path);
+                watcher.EnableRaisingEvents = true;
             }
             catch (DrawableException exc)
             {
+                imagePath = null;
+                previewImage = null;
                 MessageBox.Show(exc.Message + Environment.NewLine + "The selection has been cleared.");
                 return;
             }
             finally
             {
-                UpdatePreviewImage();
+                NewImageSelected();
             }
         }
 
-        /// <summary>
-        /// Updates the preview image, and sets the image to the the '0,0' hand position if this.imagePath points to a valid image.
-        /// Resets the hand and fire position textboxes.
-        /// </summary>
         private void UpdatePreviewImage()
         {
-            tbxHandX.Text = "0";
-            tbxHandY.Text = "0";
-
-            if (imagePath != null)
+            try
             {
-                // Display image.
-                Uri imageUri = new Uri(imagePath);
-                BitmapImage bi = new BitmapImage();
+                if (!string.IsNullOrEmpty(imagePath))
+                {
+                    tbxImage.Text = imagePath;
 
-                bi.BeginInit();
-                bi.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-                bi.CacheOption = BitmapCacheOption.OnLoad;
-                bi.UriSource = imageUri;
-                bi.EndInit();
-                bi.Freeze();
+                    Uri imageUri = new Uri(imagePath);
+                    BitmapImage bi = new BitmapImage();
 
-                previewImage = bi;
-                imgPreview.Source = bi;
-                imgPreview.Width = bi.PixelWidth * 2;
-                imgPreview.Height = bi.PixelHeight * 2;
+                    bi.BeginInit();
+                    bi.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                    bi.CacheOption = BitmapCacheOption.OnLoad;
+                    bi.UriSource = imageUri;
+                    bi.EndInit();
+                    bi.Freeze();
 
-                Thickness margin = imgPreview.Margin;
-                margin.Left = PREVIEW_MARGIN_LEFT;
-                margin.Top = PREVIEW_MARGIN_TOP - imgPreview.Height;
-                imgPreview.Margin = margin;
-
-                tbxImage.Text = imagePath;
+                    previewImage = bi;
+                    imgPreview.Source = bi;
+                    imgPreview.Width = bi.PixelWidth * 2;
+                    imgPreview.Height = bi.PixelHeight * 2;
+                }
+            }
+            catch
+            {
+                previewImage = null;
+                imagePath = null;
+                imgPreview.Source = null;
             }
 
             bool clear = false;
-            if (previewImage != null)
+
+            if (previewImage != null) // Check dimensions if image is loaded.
             {
                 int pixels = previewImage.PixelWidth * previewImage.PixelHeight;
-                if (pixels > DrawablesGenerator.PixelLimit)
+                if (pixels > 32768)
                 {
-                    clear = true;
-                    MessageBox.Show("The image (" + previewImage.PixelWidth + "x" + previewImage.PixelHeight + "=" + pixels + ") exceeds the limit of " + DrawablesGenerator.PixelLimit + " total pixels. Your selection will be cleared.");
+                    if (!warned)
+                    {
+                        MessageBoxResult res = MessageBox.Show("The image (" + previewImage.PixelWidth + "x" + previewImage.PixelHeight + "=" + pixels + ") exceeds the limit of " + 32768 + " total pixels.\nAre you sure you would like to continue?", "Warning", MessageBoxButton.YesNo);
+                        if (res == MessageBoxResult.Yes)
+                            warned = true;
+                        else
+                            clear = true;
+                    }
+                    
                 }
             }
-            else if (imagePath == null)
+            else
+            {
                 clear = true;
+            }
 
             if (clear)
             {
@@ -160,7 +192,29 @@ namespace DrawablesGeneratorTool
                 previewImage = null;
 
                 tbxImage.Text = string.Empty;
+                MessageBox.Show("The selection has been cleared.");
             }
+            else
+            {
+                // Set preview position to match the last known position.
+                Thickness t = imgPreview.Margin;
+                t.Left = PREVIEW_MARGIN_LEFT + (Convert.ToInt32(oldTbxHandX) * 2);
+                t.Top = PREVIEW_MARGIN_TOP - Convert.ToInt32(imgPreview.Height) - (Convert.ToInt32(oldTbxHandY) * 2);
+                imgPreview.Margin = t;
+            }
+        }
+
+        /// <summary>
+        /// Updates the preview image, and sets the image to the the '0,0' hand position if this.imagePath points to a valid image.
+        /// Resets the hand and fire position textboxes.
+        /// </summary>
+        private void NewImageSelected()
+        {
+            tbxHandX.Text = "0";
+            tbxHandY.Text = "0";
+
+            // Display image.
+            UpdatePreviewImage();
         }
 
         #endregion
@@ -285,7 +339,7 @@ namespace DrawablesGeneratorTool
                 return;
             }
 
-            TextBox tbx = sender as TextBox;
+            TextBox tbx = tbxHandX;
 
             if (tbx.Text == string.Empty)
             {
@@ -323,7 +377,7 @@ namespace DrawablesGeneratorTool
             if (!this.IsInitialized)
                 return;
 
-            TextBox tbx = sender as TextBox;
+            TextBox tbx = tbxHandY;
 
             if (tbx.Text == string.Empty)
             {
