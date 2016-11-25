@@ -117,7 +117,16 @@ namespace DrawablesGeneratorTool
             if (imagePath != null)
             {
                 // Display image.
-                BitmapImage bi = new BitmapImage(new Uri(imagePath));
+                Uri imageUri = new Uri(imagePath);
+                BitmapImage bi = new BitmapImage();
+
+                bi.BeginInit();
+                bi.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                bi.CacheOption = BitmapCacheOption.OnLoad;
+                bi.UriSource = imageUri;
+                bi.EndInit();
+                bi.Freeze();
+
                 previewImage = bi;
                 imgPreview.Source = bi;
                 imgPreview.Width = bi.PixelWidth * 2;
