@@ -464,7 +464,7 @@ namespace DrawablesGeneratorTool
                 generator.ReplaceWhite = true;
 
                 DrawablesOutput output = generator.Generate();
-                (new OutputWindow("Item Descriptor (Export):", (GetExporter(output)).GetDescriptor(chkAddWeaponGroup.IsChecked.HasValue && chkAddWeaponGroup.IsChecked.Value ? "weapon" : null))).Show();
+                (new OutputWindow("Item Descriptor (Export):", (GetExporter(output)).GetDescriptor(chkAddWeaponGroup.IsChecked.HasValue && chkAddWeaponGroup.IsChecked.Value ? "weapon" : null, chkAddInventoryIcon.IsChecked.Value))).Show();
             }
             catch (NotImplementedException exc)
             {
@@ -556,7 +556,7 @@ namespace DrawablesGeneratorTool
 
                 DrawablesOutput output = generator.Generate();
 
-                (new OutputWindow("Item Command:", (GetExporter(output)).GetCommand(chkAddWeaponGroup.IsChecked.HasValue && chkAddWeaponGroup.IsChecked.Value ? "weapon" : null))).Show();
+                (new OutputWindow("Item Command:", (GetExporter(output)).GetCommand(chkAddWeaponGroup.IsChecked.HasValue && chkAddWeaponGroup.IsChecked.Value ? "weapon" : null, chkAddInventoryIcon.IsChecked.Value))).Show();
             }
             catch (NotImplementedException exc)
             {

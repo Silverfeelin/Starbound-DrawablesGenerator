@@ -17,16 +17,16 @@ namespace DrawablesGeneratorTool
             this.output = output;
         }
 
-        public virtual JObject GetDescriptor(string group)
+        public virtual JObject GetDescriptor(string group, bool addInventoryIcon)
         {
-            JObject descriptor = GetActiveItemDescriptor(Template, group);
+            JObject descriptor = GetActiveItemDescriptor(Template, group, addInventoryIcon);
             ApplyParameters(descriptor);
             return descriptor;
         }
-
-        public virtual string GetCommand(string group)
+        
+        public virtual string GetCommand(string group, bool addInventoryIcon)
         {
-            JObject descriptor = GetActiveItemDescriptor(Template, group);
+            JObject descriptor = GetActiveItemDescriptor(Template, group, addInventoryIcon);
             ApplyParameters(descriptor);
             return GenerateCommand(descriptor);
         }
@@ -53,7 +53,7 @@ namespace DrawablesGeneratorTool
             return output;
         }
 
-        protected JObject GetActiveItemDescriptor(string template, string group = "weapon")
+        protected JObject GetActiveItemDescriptor(string template, string group = "weapon", bool addInventoryIcon = false)
         {
             JObject parameters = JObject.Parse(template);
             JToken parts = parameters["animationCustom"]["animatedParts"]["parts"];
@@ -76,6 +76,11 @@ namespace DrawablesGeneratorTool
 
                 parts[prefix + i++] = part;
             }
+            
+            if (addInventoryIcon)
+            {
+                parameters["inventoryIcon"] = DrawableUtilities.GenerateInventoryIcon(output);
+            }
 
             JObject descriptor = new JObject();
             descriptor["name"] = "perfectlygenericitem";
@@ -83,11 +88,6 @@ namespace DrawablesGeneratorTool
             descriptor["parameters"] = parameters;
 
             return descriptor;
-        }
-
-        public void Copy(string contents)
-        {
-            Clipboard.SetText(contents);
         }
     }
 }

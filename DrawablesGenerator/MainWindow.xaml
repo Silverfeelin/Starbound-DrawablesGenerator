@@ -120,8 +120,13 @@
         <CheckBox x:Name="chkAddWeaponGroup" HorizontalAlignment="Left" Margin="594,156,0,0" VerticalAlignment="Top"
                   ToolTip="Adding the 'weapon' transformation group will make the weapon rotate, move and scale properly.&#x0a;The positioning on the preview will not reflect the right positioning with this option enabled."/>
 
+        <Label x:Name="lblAddInventoryIcon" Content="Add 'inventoryIcon':" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="417,178,0,0"
+               ToolTip="Adds drawables for the inventory icon of the item.&#x0a;This is not recommended for larger drawables, due to the need to render twice as much."/>
+        <CheckBox x:Name="chkAddInventoryIcon" IsChecked="False" HorizontalAlignment="Left" Margin="594,183,0,0" VerticalAlignment="Top"
+                  ToolTip="Adds drawables for the inventory icon of the item.&#x0a;This is not recommended for larger drawables, due to the need to render twice as much."/>
+
         <!-- Select Generate Option -->
-        <Border Height="233" VerticalAlignment="Top" HorizontalAlignment="Left" Width="279"   Margin="417,178,0,0">
+        <Border Height="201" VerticalAlignment="Top" HorizontalAlignment="Left" Width="279"   Margin="417,210,0,0">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition MaxHeight="34"/>
@@ -142,7 +147,7 @@
                         </LinearGradientBrush>
                     </Button.Background>
                 </Button>
-                <Button Grid.Row="2" x:Name="btnInventoryIcon" Content="Inventory Icon" VerticalAlignment="Top" Height="21" Click="InventoryIcon_Click" Margin="10,0"
+                <Button Grid.Row="3" x:Name="btnInventoryIcon" Content="Inventory Icon" VerticalAlignment="Top" Height="21" Click="InventoryIcon_Click" Margin="10,0"
                         ToolTip="Generates an inventory icon and displays it in plain text.&#x0a;Uses the old drawables format.">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
@@ -151,7 +156,7 @@
                         </LinearGradientBrush>
                     </Button.Background>
                 </Button>
-                <Button Grid.Row="3" x:Name="btnCommand" Content="Spawn Command" VerticalAlignment="Top" Height="21" Click="Command_Click" Margin="10,0"
+                <Button Grid.Row="2" x:Name="btnCommand" Content="Spawn Command" VerticalAlignment="Top" Height="21" Click="Command_Click" Margin="10,0"
                         ToolTip="Generates item parameters and displays it as a '/spawnitem' command.&#x0a;Uses the selected weapon template.">
                     <Button.Background>
                         <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">

@@ -119,13 +119,16 @@ namespace DrawablesGeneratorTool
 
             foreach (Drawable item in output.Drawables)
             {
-                JObject drawable = new JObject();
-                drawable["image"] = item.ResultImage;
-                JArray position = new JArray();
-                position.Add(item.X);
-                position.Add(item.Y);
-                drawable["position"] = position;
-                drawables.Add(drawable);
+                if (item != null)
+                {
+                    JObject drawable = new JObject();
+                    drawable["image"] = item.ResultImage;
+                    JArray position = new JArray();
+                    position.Add(item.X);
+                    position.Add(item.Y);
+                    drawable["position"] = position;
+                    drawables.Add(drawable);
+                }
             }
 
             return drawables;
