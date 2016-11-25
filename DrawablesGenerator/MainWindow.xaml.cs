@@ -501,7 +501,7 @@ namespace DrawablesGeneratorTool
 
                 int j = 64;
                 int.TryParse(tbxSourceImageSize.Text, out j);
-                (new OutputWindow("Single Texture Directives:", DrawableUtilities.GenerateSingleTextureDirectives(output, j))).Show();
+                (new OutputWindow("Single Texture Directives:", DrawableUtilities.GenerateSingleTextureDirectives(output, j), false)).Show();
             }
             catch (FormatException)
             {
@@ -556,7 +556,7 @@ namespace DrawablesGeneratorTool
 
                 DrawablesOutput output = generator.Generate();
 
-                (new OutputWindow("Item Command:", (GetExporter(output)).GetCommand(chkAddWeaponGroup.IsChecked.HasValue && chkAddWeaponGroup.IsChecked.Value ? "weapon" : null, chkAddInventoryIcon.IsChecked.Value))).Show();
+                (new OutputWindow("Item Command:", (GetExporter(output)).GetCommand(chkAddWeaponGroup.IsChecked.HasValue && chkAddWeaponGroup.IsChecked.Value ? "weapon" : null, chkAddInventoryIcon.IsChecked.Value), false)).Show();
             }
             catch (NotImplementedException exc)
             {

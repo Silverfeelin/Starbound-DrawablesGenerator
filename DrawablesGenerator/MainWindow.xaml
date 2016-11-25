@@ -174,9 +174,9 @@
                     </Button.Background>
                 </Button>
                 <Label Grid.Row="5" x:Name="lblSourceImageSize" Content="Source Image Size:" HorizontalAlignment="Left" VerticalAlignment="Top"
-                       ToolTip="The biggest dimension of the source image you're applying the single texture directives to.&#x0a;This value is only used when generating 'Single Texture Directives'.&#x0a;Example: When applying a drawable to a 16x8 image, you should use the value 16." Margin="10,0,0,0" Width="163"/>
+                       ToolTip="The smallest dimension of the source image you're applying the single texture directives to.&#x0a;This value is only used when generating 'Single Texture Directives'.&#x0a;Example: When applying a drawable to a 16x8 image, you should use the value 8." Margin="10,0,0,0" Width="163"/>
                 <TextBox Grid.Row="5" x:Name="tbxSourceImageSize" Height="18" TextWrapping="NoWrap" Text="64" VerticalAlignment="Top" AllowDrop="False" TextAlignment="Right" MaxLines="1" MaxLength="6"
-                         ToolTip="The biggest dimension of the source image you're applying the single texture directives to.&#x0a;This value is only used when generating 'Single Texture Directives'.&#x0a;Example: When applying a drawable to a 16x8 image, you should use the value 16." Margin="178,4,10,0"/>
+                         ToolTip="The smallest dimension of the source image you're applying the single texture directives to.&#x0a;This value is only used when generating 'Single Texture Directives'.&#x0a;Example: When applying a drawable to a 16x8 image, you should use the value 8." Margin="178,4,10,0"/>
             </Grid>
         </Border>
         <!-- /Select Generate Option -->

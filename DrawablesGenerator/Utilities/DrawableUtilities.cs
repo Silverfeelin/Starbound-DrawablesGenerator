@@ -117,12 +117,38 @@ namespace DrawablesGeneratorTool
         {
             JArray drawables = new JArray();
 
-            foreach (Drawable item in output.Drawables)
+            for (int i = 0; i < output.Drawables.GetLength(0); i++)
             {
-                if (item != null)
+                for (int j = 0; j < output.Drawables.GetLength(1); j++)
                 {
+                    Drawable item = output.Drawables[i,j];
+
+                    if (item == null) continue;
+
                     JObject drawable = new JObject();
                     drawable["image"] = item.ResultImage;
+
+                    bool cropH = false, cropV = false;
+                    int hRest = 0, vRest = 0;
+                    if (i == output.Drawables.GetLength(0) - 1)
+                    {
+                        hRest = output.ImageWidth % 32;
+                        if (hRest != 0)
+                            cropH = true;
+                    }
+                    if (j == output.Drawables.GetLength(1) - 1)
+                    {
+                        vRest = output.ImageHeight % 8;
+                        if (vRest != 0)
+                            cropH = true;
+                    }
+                    
+                    if (cropH || cropV)
+                    {
+                        
+                        drawable["image"] += "?crop;0;0;" + (cropH ? hRest : 32) + ";" + (cropV ? vRest : 8);
+                    }
+
                     JArray position = new JArray();
                     position.Add(item.X);
                     position.Add(item.Y);
@@ -130,7 +156,6 @@ namespace DrawablesGeneratorTool
                     drawables.Add(drawable);
                 }
             }
-
             return drawables;
         }
     }

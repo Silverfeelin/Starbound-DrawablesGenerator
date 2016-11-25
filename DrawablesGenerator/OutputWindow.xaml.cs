@@ -15,18 +15,21 @@ namespace DrawablesGeneratorTool
         private JToken contentObject = null;
         private bool formatted = true;
 
-        public OutputWindow(string title, JToken content)
+        public OutputWindow(string title, JToken content, bool showToggleContent = true)
         {
             InitializeComponent();
 
-            contentObject = content;
+            btnJoin.Visibility = showToggleContent ? Visibility.Visible : Visibility.Hidden;
 
+            contentObject = content;
             tbxCode.Text = content.ToString(Newtonsoft.Json.Formatting.Indented);
         }
 
-        public OutputWindow(string title, string content)
+        public OutputWindow(string title, string content, bool showToggleContent = true)
         {
             InitializeComponent();
+
+            btnJoin.Visibility = showToggleContent ? Visibility.Visible : Visibility.Hidden;
 
             contentString = content;
             tbxCode.Text = content;   
