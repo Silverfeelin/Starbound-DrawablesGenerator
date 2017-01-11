@@ -1,7 +1,7 @@
-﻿<Application x:Class="DrawablesGenerator.App"
+﻿<Application x:Class="DrawablesGeneratorTool.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:DrawablesGenerator"
+             xmlns:local="clr-namespace:DrawablesGeneratorTool"
              Startup="Application_Startup">
     <Application.Resources>
          

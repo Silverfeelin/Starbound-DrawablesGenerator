@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Silverfeelin.StarboundDrawables;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using WinForms = System.Windows.Forms;
 
-namespace DrawablesGenerator
+namespace DrawablesGeneratorTool
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -20,26 +21,16 @@ namespace DrawablesGenerator
             {
                 try
                 {
-                    DrawableData data = new DrawableData();
-                    data.LoadImage(e.Args[0]);
-                    Clipboard.SetText(data.GenerateDrawables(0, 0).GenerateCommand());
-                    MessageBox.Show("The command has been copied to the clipboard.", "Drawables Generator");
-                }
-                catch (ArgumentException)
-                {
-                    MessageBox.Show("The image could not be loaded. Please try another image.");
+                    (new MainWindow(e.Args[0])).Show();
+                    return;
                 }
                 catch (DrawableException exc)
                 {
                     MessageBox.Show(exc.Message + Environment.NewLine + "The selection has been cleared.");
                 }
-
-                Application.Current.Shutdown();
-                return;
             }
 
-            MainWindow mw = new MainWindow();
-            mw.Show();
+            (new MainWindow()).Show();
         }
     }
 }

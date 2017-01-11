@@ -1,0 +1,18 @@
+{
+	"animationCustom": {
+		"animatedParts": {
+			"parts": {
+				"blade": {
+					"properties": {
+						"image": "/assetmissing.png"
+					}
+				},
+				"handle": {
+					"properties": {
+						"image": "/assetmissing.png"
+					}
+				}
+			}
+		}
+	}
+}

@@ -7,8 +7,8 @@
     <ProjectGuid>{C60DFF19-BE5E-43FE-B37B-677D9572E70D}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DrawablesGenerator</RootNamespace>
-    <AssemblyName>DrawablesGenerator</AssemblyName>
+    <RootNamespace>DrawablesGeneratorTool</RootNamespace>
+    <AssemblyName>DrawablesGeneratorTool</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -41,6 +41,10 @@
       <HintPath>packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="StarboundDrawables, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Silverfeelin.StarboundDrawables.1.0.0-beta4\lib\net45\StarboundDrawables.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -71,10 +75,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Drawable.cs" />
-    <Compile Include="DrawableData.cs" />
-    <Compile Include="DrawableException.cs" />
-    <Compile Include="DrawableOutput.cs" />
+    <Compile Include="Utilities\DrawableUtilities.cs" />
+    <Compile Include="Exporters\IExporter.cs" />
+    <Compile Include="Exporters\ItemExporters\PistolExporter.cs" />
+    <Compile Include="Exporters\ItemExporters\ShortswordExporter.cs" />
+    <Compile Include="Exporters\ItemExporters\TeslaStaffExporter.cs" />
+    <Compile Include="Exporters\Exporter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -136,10 +142,16 @@
     <Resource Include="Resources\previewCharSmall.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\ActiveItem.txt" />
+    <Resource Include="Resources\TeslaStaff.txt" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="dgicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Gun.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Sword.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

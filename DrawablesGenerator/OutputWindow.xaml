@@ -1,14 +1,14 @@
-﻿<Window x:Class="DrawablesGenerator.OutputWindow"
+﻿<Window x:Class="DrawablesGeneratorTool.OutputWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DrawablesGenerator"
+        xmlns:local="clr-namespace:DrawablesGeneratorTool"
         mc:Ignorable="d"
         Title="Drawables Generator - Output"
         Width="714" MinWidth="375"
         MinHeight="305" Height="452"
-        FontSize="16" FontFamily="/DrawablesGenerator;component/Resources/#Hobo">
+        FontSize="16" FontFamily="/DrawablesGeneratorTool;component/Resources/#Hobo">
     <Grid>
         <!-- Window Background -->
         <Grid.Background>
@@ -17,6 +17,23 @@
         <Label x:Name="lblTitle" Content="Drawables Code:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="tbxCode" Margin="10,37,10,10" Text="" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" TextWrapping="WrapWithOverflow"/>
         <Button x:Name="btnCopy" Content="Copy" HorizontalAlignment="Right" VerticalAlignment="Top" Width="69" Height="21" Margin="0,11,10,0" ToolTip="Copies the below code to your clipboard." Click="Copy_Click">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                    <GradientStop Color="#FFD3D3DB" Offset="0"/>
+                    <GradientStop Color="#FFEDEBEE" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+        <Button x:Name="btnJoin" Content="Toggle Format" HorizontalAlignment="Right" VerticalAlignment="Top" Height="21" Margin="0,10,158,0" Click="ToggleFormat_Click" Width="126"
+                ToolTip="Toggles formatting for the generated code. Overwrites changes made to the text below.">
+            <Button.Background>
+                <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+                    <GradientStop Color="#FFD3D3DB" Offset="0"/>
+                    <GradientStop Color="#FFEDEBEE" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
+        <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Right" VerticalAlignment="Top" Width="69" Height="21" Margin="0,10,84,0" ToolTip="Saves the below code to a file." Click="Save_Click">
             <Button.Background>
                 <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
                     <GradientStop Color="#FFD3D3DB" Offset="0"/>
