@@ -110,9 +110,6 @@
                ToolTip="The weapon template to use for supported generation methods."/>
         <ComboBox x:Name="cbxGenerateType" Margin="508,127,13,0" Height="21" VerticalAlignment="Top" SelectedValuePath="Content"
                   ToolTip="The weapon template to use for supported generation methods.">
-            <ComboBoxItem IsSelected="True">Common Pistol</ComboBoxItem>
-            <ComboBoxItem>Common Shortsword</ComboBoxItem>
-            <ComboBoxItem>Tesla Staff</ComboBoxItem>
         </ComboBox>
 
         <Label x:Name="lblAddWeaponGroup" Content="Add 'weapon' group:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="417,151,0,0"

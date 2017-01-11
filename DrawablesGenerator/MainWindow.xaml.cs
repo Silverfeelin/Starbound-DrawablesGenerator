@@ -1,6 +1,8 @@
 ﻿using Microsoft.Win32;
+using Newtonsoft.Json;
 using Silverfeelin.StarboundDrawables;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,6 +25,8 @@ namespace DrawablesGeneratorTool
         private string imagePath = null;
         private bool warned = false;
 
+        Dictionary<string, FileInfo> templates;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -32,6 +36,41 @@ namespace DrawablesGeneratorTool
             watcher.Changed += Watcher_Changed;
             watcher.Deleted += Watcher_Deleted;
             watcher.Renamed += Watcher_Deleted;
+
+            PopulateTemplates();
+        }
+
+        private void PopulateTemplates()
+        {
+            if (templates == null)
+                templates = new Dictionary<string, FileInfo>();
+
+            if (IsInitialized)
+            {
+                cbxGenerateType.Items.Clear();
+                templates.Clear();
+
+                // Resources
+                cbxGenerateType.Items.Add("Common Pistol");
+                cbxGenerateType.Items.Add("Common Shortsword");
+                cbxGenerateType.Items.Add("Tesla Staff");
+
+                // Templates from files
+                templates = new Dictionary<string, FileInfo>();
+                string currentDirectory = Directory.GetCurrentDirectory();
+                if (Directory.Exists(currentDirectory + "\\Templates"))
+                {
+                    foreach (var item in Directory.EnumerateFiles(Directory.GetCurrentDirectory() + "\\Templates"))
+                    {
+                        FileInfo fi = new FileInfo(item);
+                        templates.Add(fi.Name, fi);
+
+                        cbxGenerateType.Items.Add(fi.Name);
+                    }
+                }
+
+                cbxGenerateType.SelectedIndex = 0;
+            }
         }
 
         #region File Watcher
@@ -48,11 +87,6 @@ namespace DrawablesGeneratorTool
         }
 
         #endregion
-
-        public MainWindow(string imagePath) : this()
-        {
-            this.SelectImage(imagePath);
-        }
 
         #region Select Image
 
@@ -464,26 +498,29 @@ namespace DrawablesGeneratorTool
                 generator.ReplaceWhite = true;
 
                 DrawablesOutput output = generator.Generate();
-                (new OutputWindow("Item Descriptor (Export):", (GetExporter(output)).GetDescriptor(chkAddWeaponGroup.IsChecked.HasValue && chkAddWeaponGroup.IsChecked.Value ? "weapon" : null, chkAddInventoryIcon.IsChecked.Value))).Show();
+
+                Exporter exporter = GetExporter(output);
+                (new OutputWindow("Item Descriptor (Export):", exporter.GetDescriptor(chkAddWeaponGroup.IsChecked.HasValue && chkAddWeaponGroup.IsChecked.Value ? "weapon" : null, chkAddInventoryIcon.IsChecked.Value))).Show();
             }
-            catch (NotImplementedException exc)
+            catch(JsonReaderException exc)
             {
-                MessageBox.Show(exc.Message);
-                return;
+                MessageBox.Show("The template does not appear to be valid JSON.\n\nException:\n" + exc.Message);
             }
             catch (ArgumentNullException)
             {
                 MessageBox.Show("Argument may not be null. Did you select a valid image?");
             }
+            catch (ArgumentException exc)
+            {
+                MessageBox.Show("Illegal argument:\n" + exc.Message);
+            }
             catch (FormatException)
             {
                 MessageBox.Show("Could not convert hand offsets to numbers.");
-                return;
             }
-            catch (DrawableException exc)
+            catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
-                return;
+                MessageBox.Show("Uncaught exception:\n" + exc.Message);
             }
         }
 
@@ -556,26 +593,28 @@ namespace DrawablesGeneratorTool
 
                 DrawablesOutput output = generator.Generate();
 
-                (new OutputWindow("Item Command:", (GetExporter(output)).GetCommand(chkAddWeaponGroup.IsChecked.HasValue && chkAddWeaponGroup.IsChecked.Value ? "weapon" : null, chkAddInventoryIcon.IsChecked.Value), false)).Show();
+                Exporter exporter = GetExporter(output);
+                (new OutputWindow("Item Command:", exporter.GetCommand(chkAddWeaponGroup.IsChecked.HasValue && chkAddWeaponGroup.IsChecked.Value ? "weapon" : null, chkAddInventoryIcon.IsChecked.Value), false)).Show();
             }
-            catch (NotImplementedException exc)
+            catch (JsonReaderException exc)
             {
-                MessageBox.Show(exc.Message);
-                return;
+                MessageBox.Show("The template does not appear to be valid JSON.\n\nException:\n" + exc.Message);
             }
             catch (ArgumentNullException)
             {
                 MessageBox.Show("Argument may not be null. Did you select a valid image?");
             }
+            catch (ArgumentException exc)
+            {
+                MessageBox.Show("Illegal argument:\n" + exc.Message);
+            }
             catch (FormatException)
             {
                 MessageBox.Show("Could not convert hand offsets to numbers.");
-                return;
             }
-            catch (DrawableException exc)
+            catch (Exception exc)
             {
-                MessageBox.Show(exc.Message);
-                return;
+                MessageBox.Show("Uncaught exception:\n" + exc.Message);
             }
         }
 
@@ -583,9 +622,25 @@ namespace DrawablesGeneratorTool
 
         private Exporter GetExporter(DrawablesOutput output)
         {
-            switch ((string)cbxGenerateType.SelectedValue)
+            string value = (string)cbxGenerateType.SelectedItem;
+            switch (value)
             {
                 default:
+                    {
+                        FileInfo file = templates[value];
+                        string template;
+                        try
+                        {
+                            template = File.ReadAllText(file.FullName);
+                        }
+                        catch (Exception e)
+                        {
+                            throw new ArgumentException("Could not load the template '" + file.Name + "'.\n\nException:\n" + e.Message);
+                        }
+
+                        return new TemplateExporter(output, template);
+                    }
+                case null:
                 case "Common Pistol":
                     return new PistolExporter(output);
                 case "Common Shortsword":

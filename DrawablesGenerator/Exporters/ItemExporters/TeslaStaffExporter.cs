@@ -16,11 +16,5 @@ namespace DrawablesGeneratorTool
         public TeslaStaffExporter(DrawablesOutput output) : base(output)
         {
         }
-
-        public override void ApplyParameters(JObject descriptor)
-        {
-            descriptor["name"] = "teslastaff";
-            descriptor["parameters"]["shortdescription"] = "Drawable Staff";
-        }
     }
 }

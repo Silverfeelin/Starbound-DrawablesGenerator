@@ -16,11 +16,5 @@ namespace DrawablesGeneratorTool
         public PistolExporter(DrawablesOutput output) : base(output)
         {
         }
-        
-        public override void ApplyParameters(JObject descriptor)
-        {
-            descriptor["name"] = "commonpistol";
-            descriptor["parameters"]["shortdescription"] = "Drawable Pistol";
-        }
     }
 }

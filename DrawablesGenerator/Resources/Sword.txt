@@ -1,18 +1,22 @@
 {
-	"animationCustom": {
-		"animatedParts": {
-			"parts": {
-				"blade": {
-					"properties": {
-						"image": "/assetmissing.png"
-					}
-				},
-				"handle": {
-					"properties": {
-						"image": "/assetmissing.png"
-					}
-				}
-			}
-		}
-	}
+  "name": "commonshortsword",
+  "count": 1,
+  "parameters": {
+  	"animationCustom": {
+  		"animatedParts": {
+  			"parts": {
+  				"blade": {
+  					"properties": {
+  						"image": "/assetmissing.png"
+  					}
+  				},
+  				"handle": {
+  					"properties": {
+  						"image": "/assetmissing.png"
+  					}
+  				}
+  			}
+  		}
+  	}
+  }
 }

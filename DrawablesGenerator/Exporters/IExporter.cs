@@ -7,6 +7,5 @@ namespace DrawablesGeneratorTool
         string Template { get; }
         JObject GetDescriptor(string group, bool addInventoryIcon);
         string GetCommand(string group, bool addInventoryIcon);
-        void ApplyParameters(JObject descriptor);
     }
 }

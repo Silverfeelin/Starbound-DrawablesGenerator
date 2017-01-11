@@ -17,19 +17,6 @@ namespace DrawablesGeneratorTool
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            if (e.Args.Length == 1)
-            {
-                try
-                {
-                    (new MainWindow(e.Args[0])).Show();
-                    return;
-                }
-                catch (DrawableException exc)
-                {
-                    MessageBox.Show(exc.Message + Environment.NewLine + "The selection has been cleared.");
-                }
-            }
-
             (new MainWindow()).Show();
         }
     }

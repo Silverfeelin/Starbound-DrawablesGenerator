@@ -19,19 +19,15 @@ namespace DrawablesGeneratorTool
 
         public virtual JObject GetDescriptor(string group, bool addInventoryIcon)
         {
-            JObject descriptor = GetActiveItemDescriptor(Template, group, addInventoryIcon);
-            ApplyParameters(descriptor);
+            JObject descriptor = CreateDescriptor(Template, group, addInventoryIcon);
             return descriptor;
         }
         
         public virtual string GetCommand(string group, bool addInventoryIcon)
         {
-            JObject descriptor = GetActiveItemDescriptor(Template, group, addInventoryIcon);
-            ApplyParameters(descriptor);
+            JObject descriptor = CreateDescriptor(Template, group, addInventoryIcon);
             return GenerateCommand(descriptor);
         }
-
-        public abstract void ApplyParameters(JObject descriptor);
 
         public void Export(string path, string contents)
         {
@@ -53,9 +49,30 @@ namespace DrawablesGeneratorTool
             return output;
         }
 
-        protected JObject GetActiveItemDescriptor(string template, string group = "weapon", bool addInventoryIcon = false)
+        protected JObject CreateDescriptor(string template, string group = "weapon", bool addInventoryIcon = false)
         {
-            JObject parameters = JObject.Parse(template);
+            JObject descriptor = JObject.Parse(template);
+
+            if (descriptor["name"] == null)
+                descriptor["name"] = "perfectlygenericitem";
+
+            if (descriptor["count"] == null)
+                descriptor["count"] = 1;
+
+            if (descriptor["parameters"] == null)
+                descriptor["parameters"] = new JObject();
+
+            JObject parameters = (JObject)descriptor["parameters"];
+
+            if (parameters == null)
+                parameters = new JObject();
+            if (parameters["animationCustom"] == null)
+                parameters["animationCustom"] = new JObject();
+            if (parameters["animationCustom"]["animatedParts"] == null)
+                parameters["animationCustom"]["animatedParts"] = new JObject();
+            if (parameters["animationCustom"]["animatedParts"]["parts"] == null)
+                parameters["animationCustom"]["animatedParts"]["parts"] = new JObject();
+
             JToken parts = parameters["animationCustom"]["animatedParts"]["parts"];
 
             string prefix = "D_";
@@ -81,12 +98,7 @@ namespace DrawablesGeneratorTool
             {
                 parameters["inventoryIcon"] = DrawableUtilities.GenerateInventoryIcon(output);
             }
-
-            JObject descriptor = new JObject();
-            descriptor["name"] = "perfectlygenericitem";
-            descriptor["count"] = 1;
-            descriptor["parameters"] = parameters;
-
+            
             return descriptor;
         }
     }

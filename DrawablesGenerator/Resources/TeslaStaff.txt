@@ -1,18 +1,22 @@
 {
-	"animationCustom": {
-		"animatedParts": {
-			"parts": {
-				"staff": {
-					"properties": {
-						"image": "/assetmissing.png"
-					}
-				},
-				"stone": {
-					"properties": {
-						"image": "/assetmissing.png"
-					}
-				}
-			}
-		}
-	}
+  "name": "teslastaff",
+  "count": 1,
+  "parameters": {
+  	"animationCustom": {
+  		"animatedParts": {
+  			"parts": {
+  				"staff": {
+  					"properties": {
+  						"image": "/assetmissing.png"
+  					}
+  				},
+  				"stone": {
+  					"properties": {
+  						"image": "/assetmissing.png"
+  					}
+  				}
+  			}
+  		}
+  	}
+  }
 }

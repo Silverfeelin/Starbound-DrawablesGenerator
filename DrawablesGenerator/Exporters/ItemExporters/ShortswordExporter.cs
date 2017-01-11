@@ -16,11 +16,5 @@ namespace DrawablesGeneratorTool
         public ShortswordExporter(DrawablesOutput output) : base(output)
         {
         }
-
-        public override void ApplyParameters(JObject descriptor)
-        {
-            descriptor["name"] = "commonshortsword";
-            descriptor["parameters"]["shortdescription"] = "Drawable Shortsword";
-        }
     }
 }
