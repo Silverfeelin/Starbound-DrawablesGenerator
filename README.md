@@ -2,7 +2,7 @@
 Create multiplayer-compatible drawables for Starbound.
 
 ## Table of Contents
-- [Installation](#installation)
+- [Wiki](#wiki)
 - [Usage](#usage)
  - [Regular usage](#regular-usage)
  - [Quick drag and drop](#quick-drag-and-drop)
@@ -18,10 +18,14 @@ Create multiplayer-compatible drawables for Starbound.
 ![Application](https://raw.githubusercontent.com/Silverfeelin/Drawables-Generator/master/readme/application.png "Application")  
 *Overview of the application*
 
-## Installation
-* If you haven't already, [download](https://www.microsoft.com/en-us/download/details.aspx?id=30653) and install .NET Framework 4.5.
-* [Download](https://github.com/Silverfeelin/Drawables-Generator/releases) the release for the current version of Starbound.
-* Unpack the archive. Make sure the executable and included library files are unpacked to the same location.
+## Wiki
+
+The Wiki covers about everything you need to know and do to set up and use the Drawables Generator.
+https://github.com/Silverfeelin/Starbound-DrawablesGenerator/wiki
+
+### Quick Reference
+
+* [Installation](https://github.com/Silverfeelin/Starbound-DrawablesGenerator/wiki/Installation)
 
 ## Usage
 
