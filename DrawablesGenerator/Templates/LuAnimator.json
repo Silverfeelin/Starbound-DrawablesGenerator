@@ -1,0 +1,34 @@
+{
+  "name": "commonbroadsword",
+  "count": 1,
+  "parameters": {
+  	"animationCustom": {
+  		"animatedParts": {
+  			"parts": {
+  				"blade": {
+  					"properties": {
+  						"image": "/assetmissing.png"
+  					}
+  				},
+  				"handle": {
+  					"properties": {
+  						"image": "/assetmissing.png"
+  					}
+  				}
+  			}
+  		}
+  	},
+    "twoHanded": false,
+    "primaryAbility": {
+      "fireTime" : 0,
+      "stances": {
+        "idle": {
+          "armRotation": 0,
+          "weaponRotation": 0,
+          "allowRotate": false,
+          "allowFlip": false
+        }
+      }
+    }
+  }
+}
