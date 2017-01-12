@@ -3,9 +3,6 @@ Create multiplayer-compatible drawables for Starbound.
 
 ## Table of Contents
 - [Wiki](#wiki)
-- [Usage](#usage)
- - [Regular usage](#regular-usage)
- - [Quick drag and drop](#quick-drag-and-drop)
 - [Generation methods](#generation-methods)
  - [Plain Text](#plain-text)
  - [Spawn Command](#spawn-command)
