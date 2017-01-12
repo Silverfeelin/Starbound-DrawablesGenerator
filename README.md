@@ -26,19 +26,7 @@ https://github.com/Silverfeelin/Starbound-DrawablesGenerator/wiki
 ### Quick Reference
 
 * [Installation](https://github.com/Silverfeelin/Starbound-DrawablesGenerator/wiki/Installation)
-
-## Usage
-
-##### Regular usage
-* Open the application.
-* Select an image. You can do so by pressing 'Select Image' or dragging an image file into the window.
- * Images may contain up to `32678` pixels (width in pixels multiplied by height in pixels). This is to keep the performance losses low.
-* Position the image. You can do so by dragging on the preview or manually adjusting the X and Y coordinate.
-* Select a generation method.
-
-#### Quick drag and drop
-You can drag an image directly onto the executable. This will copy a `/spawnitem` command to your clipboard.  
-The default starting position (0,0) is used in this method.
+* [Usage](https://github.com/Silverfeelin/Starbound-DrawablesGenerator/wiki/Usage)
 
 ## Generation Methods
 
