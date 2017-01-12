@@ -119,6 +119,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Templates\LuAnimator.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Resource Include="Resources\hobo.ttf" />
   </ItemGroup>
   <ItemGroup>
