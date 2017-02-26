@@ -61,7 +61,7 @@ namespace DrawablesGeneratorTool
             int scale = (int)Math.Ceiling((double)max / baseScale);
 
             StringBuilder dir = new StringBuilder();
-            dir.AppendFormat("?replace;00000000=ffffff;ffffff00=ffffff?setcolor=ffffff?scalenearest={0}?crop=0;0;{1};{2}", scale, w, h);
+            dir.AppendFormat("?setcolor=ffffff?replace;00000000=ffffff;ffffff00=ffffff?setcolor=ffffff?scalenearest={0}?crop=0;0;{1};{2}", scale, w, h);
 
             foreach (Drawable drawable in output.Drawables)
             {
