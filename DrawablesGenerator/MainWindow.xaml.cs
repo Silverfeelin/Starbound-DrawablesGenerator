@@ -530,15 +530,17 @@ namespace DrawablesGeneratorTool
             {
                 DrawablesGenerator generator = new DrawablesGenerator(imagePath);
 
+                bool fade = chkFade.IsChecked.Value;
+
                 generator = DrawableUtilities.SetUpGenerator(generator, tbxHandX.Text, tbxHandY.Text, tbxIgnoreColor.Text);
-                generator.ReplaceBlank = true;
+                generator.ReplaceBlank = !fade;
                 generator.ReplaceWhite = true;
 
                 DrawablesOutput output = generator.Generate();
 
                 int j = 64;
                 int.TryParse(tbxSourceImageSize.Text, out j);
-                (new OutputWindow("Single Texture Directives:", DrawableUtilities.GenerateSingleTextureDirectives(output, j), false)).Show();
+                (new OutputWindow("Single Texture Directives:", DrawableUtilities.GenerateSingleTextureDirectives(output, j, fade), false)).Show();
             }
             catch (FormatException)
             {

@@ -52,7 +52,7 @@ namespace DrawablesGeneratorTool
         /// <param name="baseScale">Base scale. Should be the biggest dimension in the source image this string will be applied to by the user.
         /// EG. If the user wishes to apply a drawable bigger than 30x50 to a 30x50 object, the base scale should be 50.</param>
         /// <returns>Directives string</returns>
-        public static string GenerateSingleTextureDirectives(DrawablesOutput output, int baseScale = 64)
+        public static string GenerateSingleTextureDirectives(DrawablesOutput output, int baseScale = 64, bool fade = false)
         {
             int w = output.ImageWidth,
                 h = output.ImageHeight;
@@ -66,7 +66,14 @@ namespace DrawablesGeneratorTool
             foreach (Drawable drawable in output.Drawables)
             {
                 if (drawable != null)
+                {
                     dir.AppendFormat("?blendmult={0};{1};{2}{3}", drawable.Texture, -drawable.X, -drawable.Y, drawable.Directives);
+
+                    if (fade)
+                    {
+                        dir.Append("?fade;80ff80;0.0001518");
+                    }
+                }
             }
 
             dir.Append("?replace;ffffffff=00000000");
