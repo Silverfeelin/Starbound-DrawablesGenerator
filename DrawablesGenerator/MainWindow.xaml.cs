@@ -3,36 +3,39 @@ using Newtonsoft.Json;
 using Silverfeelin.StarboundDrawables;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using DrawablesGeneratorTool.Exporters;
+using DrawablesGeneratorTool.Exporters.ItemExporters;
+using DrawablesGeneratorTool.Utilities;
 
 namespace DrawablesGeneratorTool
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
-    /// </summary>
+    /// </summary>]
+    // ReSharper disable once RedundantExtendsListEntry
     public partial class MainWindow : Window
     {
-        private static readonly int
-            PREVIEW_MARGIN_LEFT = 153,
-            PREVIEW_MARGIN_TOP = 306;
+        private const int PreviewMarginLeft = 153;
+        private const int PreviewMarginTop = 306;
 
         private readonly FileSystemWatcher watcher;
-        private BitmapImage previewImage = null;
-        private string imagePath = null;
-        private bool warned = false;
+        private BitmapImage previewImage;
+        private string imagePath;
+        private bool warned;
 
-        Dictionary<string, FileInfo> templates;
+        private Dictionary<string, FileInfo> templates;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            watcher = new FileSystemWatcher();
-            watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName;
+            watcher = new FileSystemWatcher { NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName };
             watcher.Changed += Watcher_Changed;
             watcher.Deleted += Watcher_Deleted;
             watcher.Renamed += Watcher_Deleted;
@@ -45,32 +48,31 @@ namespace DrawablesGeneratorTool
             if (templates == null)
                 templates = new Dictionary<string, FileInfo>();
 
-            if (IsInitialized)
+            if (!IsInitialized) return;
+
+            cbxGenerateType.Items.Clear();
+            templates.Clear();
+
+            // Resources
+            cbxGenerateType.Items.Add("Common Pistol");
+            cbxGenerateType.Items.Add("Common Shortsword");
+            cbxGenerateType.Items.Add("Tesla Staff");
+
+            // Templates from files
+            templates = new Dictionary<string, FileInfo>();
+            var currentDirectory = Directory.GetCurrentDirectory();
+            if (Directory.Exists(currentDirectory + "\\Templates"))
             {
-                cbxGenerateType.Items.Clear();
-                templates.Clear();
-
-                // Resources
-                cbxGenerateType.Items.Add("Common Pistol");
-                cbxGenerateType.Items.Add("Common Shortsword");
-                cbxGenerateType.Items.Add("Tesla Staff");
-
-                // Templates from files
-                templates = new Dictionary<string, FileInfo>();
-                string currentDirectory = Directory.GetCurrentDirectory();
-                if (Directory.Exists(currentDirectory + "\\Templates"))
+                foreach (var item in Directory.EnumerateFiles(Directory.GetCurrentDirectory() + "\\Templates"))
                 {
-                    foreach (var item in Directory.EnumerateFiles(Directory.GetCurrentDirectory() + "\\Templates"))
-                    {
-                        FileInfo fi = new FileInfo(item);
-                        templates.Add(fi.Name, fi);
+                    var fi = new FileInfo(item);
+                    templates.Add(fi.Name, fi);
 
-                        cbxGenerateType.Items.Add(fi.Name);
-                    }
+                    cbxGenerateType.Items.Add(fi.Name);
                 }
-
-                cbxGenerateType.SelectedIndex = 0;
             }
+
+            cbxGenerateType.SelectedIndex = 0;
         }
 
         #region File Watcher
@@ -78,12 +80,12 @@ namespace DrawablesGeneratorTool
         // Update selected image when modified externally.
         private void Watcher_Deleted(object sender, FileSystemEventArgs e)
         {
-            Application.Current.Dispatcher.Invoke(new Action(() => { SelectImage(null); }));
+            Application.Current.Dispatcher.Invoke(() => { SelectImage(null); });
         }
 
         private void Watcher_Changed(object sender, FileSystemEventArgs e)
         {
-            Application.Current.Dispatcher.Invoke(new Action(() => { UpdatePreviewImage(); }));
+            Application.Current.Dispatcher.Invoke(UpdatePreviewImage);
         }
 
         #endregion
@@ -98,13 +100,14 @@ namespace DrawablesGeneratorTool
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void SelectImage_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "Image files|*.png;*.jpg;*.bmp;*.gif";
-            ofd.Title = "Select an image.";
+            var ofd = new OpenFileDialog
+            {
+                Title = "Select an image.",
+                Filter = "Image files|*.png;*.jpg;*.bmp;*.gif",
+            };
 
-            bool? ofdResult = ofd.ShowDialog();
-            if (!ofdResult.HasValue || !ofdResult.Value)
-                return;
+            var ofdResult = ofd.ShowDialog();
+            if (ofdResult != true) return;
 
             SelectImage(ofd.FileName);
         }
@@ -119,24 +122,18 @@ namespace DrawablesGeneratorTool
         {
             try
             {
-                if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                {
-                    string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                    if (files.Length == 1)
-                    {
-                        SelectImage(files[0]);
-                    }
-                }
+                if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
+                var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if (files?.Length == 1)
+                    SelectImage(files[0]);
             }
             catch (ArgumentException)
             {
                 MessageBox.Show("The image could not be loaded. Please try another image.");
-                return;
             }
             catch (DrawableException exc)
             {
                 MessageBox.Show(exc.Message + Environment.NewLine + "The selection has been cleared.");
-                return;
             }
         }
 
@@ -157,7 +154,6 @@ namespace DrawablesGeneratorTool
                 imagePath = null;
                 previewImage = null;
                 MessageBox.Show(exc.Message + Environment.NewLine + "The selection has been cleared.");
-                return;
             }
             finally
             {
@@ -173,8 +169,8 @@ namespace DrawablesGeneratorTool
                 {
                     tbxImage.Text = imagePath;
 
-                    Uri imageUri = new Uri(imagePath);
-                    BitmapImage bi = new BitmapImage();
+                    var imageUri = new Uri(imagePath);
+                    var bi = new BitmapImage();
 
                     bi.BeginInit();
                     bi.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
@@ -196,16 +192,16 @@ namespace DrawablesGeneratorTool
                 imgPreview.Source = null;
             }
 
-            bool clear = false;
+            var clear = false;
 
             if (previewImage != null) // Check dimensions if image is loaded.
             {
-                int pixels = previewImage.PixelWidth * previewImage.PixelHeight;
+                var pixels = previewImage.PixelWidth * previewImage.PixelHeight;
                 if (pixels > 32768)
                 {
                     if (!warned)
                     {
-                        MessageBoxResult res = MessageBox.Show("The image (" + previewImage.PixelWidth + "x" + previewImage.PixelHeight + "=" + pixels + ") exceeds the limit of " + 32768 + " total pixels.\nAre you sure you would like to continue?", "Warning", MessageBoxButton.YesNo);
+                        var res = MessageBox.Show("The image (" + previewImage.PixelWidth + "x" + previewImage.PixelHeight + "=" + pixels + ") exceeds the limit of " + 32768 + " total pixels.\nAre you sure you would like to continue?", "Warning", MessageBoxButton.YesNo);
                         if (res == MessageBoxResult.Yes)
                             warned = true;
                         else
@@ -231,9 +227,9 @@ namespace DrawablesGeneratorTool
             else
             {
                 // Set preview position to match the last known position.
-                Thickness t = imgPreview.Margin;
-                t.Left = PREVIEW_MARGIN_LEFT + (Convert.ToInt32(oldTbxHandX) * 2);
-                t.Top = PREVIEW_MARGIN_TOP - Convert.ToInt32(imgPreview.Height) - (Convert.ToInt32(oldTbxHandY) * 2);
+                var t = imgPreview.Margin;
+                t.Left = PreviewMarginLeft + (Convert.ToInt32(oldTbxHandX) * 2);
+                t.Top = PreviewMarginTop - Convert.ToInt32(imgPreview.Height) - (Convert.ToInt32(oldTbxHandY) * 2);
                 imgPreview.Margin = t;
             }
         }
@@ -264,7 +260,7 @@ namespace DrawablesGeneratorTool
         private void Preview_MouseDown(object sender, MouseButtonEventArgs e)
         {
             brdPreview.CaptureMouse();
-            this.Preview_MouseMove(sender, e);
+            Preview_MouseMove(sender, e);
         }
 
         /// <summary>
@@ -275,25 +271,24 @@ namespace DrawablesGeneratorTool
         private void Preview_MouseMove(object sender, MouseEventArgs e)
         {
             // TODO: Change generator.Image to self contained value.
-            if (previewImage != null && brdPreview.IsMouseCaptured)
-            {
-                var pos = e.GetPosition(brdPreview);
-                Thickness margin = new Thickness(pos.X - (imgPreview.Width / 2), pos.Y - (imgPreview.Height / 2), 0, 0);
+            if (previewImage == null || !brdPreview.IsMouseCaptured) return;
 
-                // Prevent displaying the image 'between' game pixels.
-                if (margin.Top % 2 == 0)
-                    margin.Top++;
+            var pos = e.GetPosition(brdPreview);
+            var margin = new Thickness(pos.X - (imgPreview.Width / 2), pos.Y - (imgPreview.Height / 2), 0, 0);
 
-                if (margin.Left % 2 == 0)
-                    margin.Left++;
+            // Prevent displaying the image 'between' game pixels.
+            if (Math.Abs(margin.Top % 2) < 0.1d)
+                margin.Top++;
 
-                int originalWidth = PREVIEW_MARGIN_LEFT,
-                    originalHeight = PREVIEW_MARGIN_TOP - Convert.ToInt32(imgPreview.Height);
+            if (Math.Abs(margin.Left % 2) < 0.1d)
+                margin.Left++;
 
-                // This also fires HandX_TextChanged and HandY_TextChanged.
-                tbxHandX.Text = Math.Ceiling((margin.Left - originalWidth) / 2).ToString();
-                tbxHandY.Text = (-Math.Ceiling((margin.Top - originalHeight) / 2)).ToString();
-            }
+            int originalWidth = PreviewMarginLeft,
+                originalHeight = PreviewMarginTop - Convert.ToInt32(imgPreview.Height);
+
+            // This also fires HandX_TextChanged and HandY_TextChanged.
+            tbxHandX.Text = Math.Ceiling((margin.Left - originalWidth) / 2).ToString(CultureInfo.InvariantCulture);
+            tbxHandY.Text = (-Math.Ceiling((margin.Top - originalHeight) / 2)).ToString(CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -315,30 +310,21 @@ namespace DrawablesGeneratorTool
         /// </summary>
         /// <param name="sender">The source of the event</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void ThemeBlack_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            ChangeTheme("DarkSmall.png");
-        }
+        private void ThemeBlack_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => ChangeTheme("DarkSmall.png");
 
         /// <summary>
         /// Changes the background of the preview to a light image.
         /// </summary>
         /// <param name="sender">The source of the event</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void ThemeWhite_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            ChangeTheme("LightSmall.png");
-        }
+        private void ThemeWhite_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => ChangeTheme("LightSmall.png");
 
         /// <summary>
         /// Changes the background of the preview to a natural image.
         /// </summary>
         /// <param name="sender">The source of the event</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void ThemeGreen_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            ChangeTheme("NaturalSmall.png");
-        }
+        private void ThemeGreen_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => ChangeTheme("NaturalSmall.png");
 
         /// <summary>
         /// Changes the background of the preview.
@@ -346,7 +332,7 @@ namespace DrawablesGeneratorTool
         /// <param name="resourcePath">Path to an image, relative to Project/Resources/. Do not start with a slash.</param>
         private void ChangeTheme(string resourcePath)
         {
-            if (resourcePath.IndexOf("/") == 0)
+            if (resourcePath.IndexOf("/", StringComparison.Ordinal) == 0)
                 resourcePath = resourcePath.Substring(1);
 
             imgPreviewBackground.Source = new BitmapImage(new Uri("pack://application:,,,/Resources/" + resourcePath));
@@ -368,16 +354,12 @@ namespace DrawablesGeneratorTool
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void HandX_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!this.IsInitialized)
-            {
-                return;
-            }
+            if (!IsInitialized) return;
 
-            TextBox tbx = tbxHandX;
-
+            var tbx = tbxHandX;
             if (tbx.Text == string.Empty)
             {
-                this.oldTbxHandX = "0";
+                oldTbxHandX = "0";
                 tbx.CaretIndex = 1;
                 return;
             }
@@ -386,16 +368,16 @@ namespace DrawablesGeneratorTool
 
             if (e.Handled)
             {
-                int index = DrawableUtilities.Clamp(tbx.CaretIndex - 1, 0, tbx.Text.Length - 1);
-                tbx.Text = this.oldTbxHandX;
+                var index = DrawableUtilities.Clamp(tbx.CaretIndex - 1, 0, tbx.Text.Length - 1);
+                tbx.Text = oldTbxHandX;
                 tbx.CaretIndex = index;
             }
             else
             {
-                this.oldTbxHandX = tbx.Text;
+                oldTbxHandX = tbx.Text;
 
-                Thickness t = imgPreview.Margin;
-                t.Left = PREVIEW_MARGIN_LEFT + (Convert.ToInt32(tbx.Text) * 2);
+                var t = imgPreview.Margin;
+                t.Left = PreviewMarginLeft + (Convert.ToInt32(tbx.Text) * 2);
                 imgPreview.Margin = t;
             }
         }
@@ -408,14 +390,12 @@ namespace DrawablesGeneratorTool
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void HandY_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!this.IsInitialized)
-                return;
+            if (!IsInitialized) return;
 
-            TextBox tbx = tbxHandY;
-
+            var tbx = tbxHandY;
             if (tbx.Text == string.Empty)
             {
-                this.oldTbxHandY = "0";
+                oldTbxHandY = "0";
                 tbx.CaretIndex = 1;
                 return;
             }
@@ -424,16 +404,15 @@ namespace DrawablesGeneratorTool
 
             if (e.Handled)
             {
-                int index = DrawableUtilities.Clamp(tbx.CaretIndex - 1, 0, tbx.Text.Length - 1);
-                tbx.Text = this.oldTbxHandY;
+                var index = DrawableUtilities.Clamp(tbx.CaretIndex - 1, 0, tbx.Text.Length - 1);
+                tbx.Text = oldTbxHandY;
                 tbx.CaretIndex = index;
             }
             else
             {
-                this.oldTbxHandY = tbx.Text;
-
-                Thickness t = imgPreview.Margin;
-                t.Top = PREVIEW_MARGIN_TOP - Convert.ToInt32(imgPreview.Height) - (Convert.ToInt32(tbx.Text) * 2);
+                oldTbxHandY = tbx.Text;
+                var t = imgPreview.Margin;
+                t.Top = PreviewMarginTop - Convert.ToInt32(imgPreview.Height) - (Convert.ToInt32(tbx.Text) * 2);
                 imgPreview.Margin = t;
             }
         }
@@ -445,13 +424,15 @@ namespace DrawablesGeneratorTool
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void Hand_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            TextBox tbx = sender as TextBox;
+            if (!(sender is TextBox tbx)) return;
+
             if (tbx.Text == string.Empty)
             {
                 tbx.Text = "0";
             }
 
-            string text = tbx.Text;
+            var text = tbx.Text;
+            // ReSharper disable once SwitchStatementMissingSomeCases
             switch (e.Key)
             {
                 case Key.Up:
@@ -464,8 +445,6 @@ namespace DrawablesGeneratorTool
                     tbx.AppendText((Convert.ToInt32(text) - 1).ToString());
                     e.Handled = true;
                     break;
-                default:
-                    break;
             }
         }
 
@@ -476,12 +455,28 @@ namespace DrawablesGeneratorTool
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void Hand_LostFocus(object sender, RoutedEventArgs e)
         {
-            TextBox tbx = sender as TextBox;
+            if (!(sender is TextBox tbx)) return;
 
             if (tbx.Text == string.Empty)
             {
                 tbx.Text = "0";
             }
+        }
+
+        #endregion
+
+        #region Modes
+
+        private void ChkScale_Click(object sender, RoutedEventArgs e)
+        {
+            if (chkScale.IsChecked == true)
+                chkFade.IsChecked = false;
+        }
+
+        private void ChkFade_Click(object sender, RoutedEventArgs e)
+        {
+            if (chkFade.IsChecked == true)
+                chkScale.IsChecked = false;
         }
 
         #endregion
@@ -492,14 +487,12 @@ namespace DrawablesGeneratorTool
         {
             try
             {
-                DrawablesGenerator generator = new DrawablesGenerator(imagePath);
-
+                var generator = new DrawablesGenerator(imagePath);
                 generator = DrawableUtilities.SetUpGenerator(generator, tbxHandX.Text, tbxHandY.Text, tbxIgnoreColor.Text);
                 generator.ReplaceWhite = true;
 
-                DrawablesOutput output = generator.Generate();
-
-                Exporter exporter = GetExporter(output);
+                var output = generator.Generate();
+                var exporter = GetExporter(output);
                 (new OutputWindow("Item Descriptor (Export):", exporter.GetDescriptor(chkAddWeaponGroup.IsChecked.HasValue && chkAddWeaponGroup.IsChecked.Value ? "weapon" : null, chkAddInventoryIcon.IsChecked.Value))).Show();
             }
             catch(JsonReaderException exc)
@@ -528,19 +521,23 @@ namespace DrawablesGeneratorTool
         {
             try
             {
-                DrawablesGenerator generator = new DrawablesGenerator(imagePath);
+                var generator = new DrawablesGenerator(imagePath);
 
-                bool fade = chkFade.IsChecked.Value;
+                var fade = chkFade.IsChecked == true;
+                var scale = chkScale.IsChecked == true;
 
                 generator = DrawableUtilities.SetUpGenerator(generator, tbxHandX.Text, tbxHandY.Text, tbxIgnoreColor.Text);
                 generator.ReplaceBlank = !fade;
                 generator.ReplaceWhite = true;
 
-                DrawablesOutput output = generator.Generate();
-
-                int j = 64;
+                var j = 64;
                 int.TryParse(tbxSourceImageSize.Text, out j);
-                (new OutputWindow("Single Texture Directives:", DrawableUtilities.GenerateSingleTextureDirectives(output, j, fade), false)).Show();
+
+                var output = scale ? generator.GenerateScale() : generator.Generate();
+
+                
+                var data = !scale ? DrawableUtilities.GenerateSingleTextureDirectives(output, j, fade) : output.Drawables[0,0].Directives;
+                (new OutputWindow("Single Texture Directives:", data, false)).Show();
             }
             catch (FormatException)
             {
@@ -553,7 +550,6 @@ namespace DrawablesGeneratorTool
             catch (DrawableException exc)
             {
                 MessageBox.Show(exc.Message);
-                return;
             }
         }
 
@@ -561,12 +557,10 @@ namespace DrawablesGeneratorTool
         {
             try
             {
-                DrawablesGenerator generator = new DrawablesGenerator(imagePath);
-
+                var generator = new DrawablesGenerator(imagePath);
                 generator = DrawableUtilities.SetUpGenerator(generator, "0", "0", tbxIgnoreColor.Text);
 
-                DrawablesOutput output = generator.Generate();
-                
+                var output = generator.Generate();
                 (new OutputWindow("Inventory Icon:", DrawableUtilities.GenerateInventoryIcon(output))).Show();
             }
             catch (FormatException)
@@ -580,7 +574,6 @@ namespace DrawablesGeneratorTool
             catch (DrawableException exc)
             {
                 MessageBox.Show(exc.Message);
-                return;
             }
         }
 
@@ -588,14 +581,12 @@ namespace DrawablesGeneratorTool
         {
             try
             {
-                DrawablesGenerator generator = new DrawablesGenerator(imagePath);
-
+                var generator = new DrawablesGenerator(imagePath);
                 generator = DrawableUtilities.SetUpGenerator(generator, tbxHandX.Text, tbxHandY.Text, tbxIgnoreColor.Text);
                 generator.ReplaceWhite = true;
 
-                DrawablesOutput output = generator.Generate();
-
-                Exporter exporter = GetExporter(output);
+                var output = generator.Generate();
+                var exporter = GetExporter(output);
                 (new OutputWindow("Item Command:", exporter.GetCommand(chkAddWeaponGroup.IsChecked.HasValue && chkAddWeaponGroup.IsChecked.Value ? "weapon" : null, chkAddInventoryIcon.IsChecked.Value), false)).Show();
             }
             catch (JsonReaderException exc)
@@ -621,15 +612,15 @@ namespace DrawablesGeneratorTool
         }
 
         #endregion
-
+        
         private Exporter GetExporter(DrawablesOutput output)
         {
-            string value = (string)cbxGenerateType.SelectedItem;
+            var value = (string)cbxGenerateType.SelectedItem;
             switch (value)
             {
                 default:
                     {
-                        FileInfo file = templates[value];
+                        var file = templates[value];
                         string template;
                         try
                         {

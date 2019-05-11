@@ -1,17 +1,10 @@
-﻿using Newtonsoft.Json.Linq;
-using Silverfeelin.StarboundDrawables;
+﻿using Silverfeelin.StarboundDrawables;
 
-namespace DrawablesGeneratorTool
+namespace DrawablesGeneratorTool.Exporters.ItemExporters
 {
-    public class TeslaStaffExporter : Exporter, IExporter
+    public class TeslaStaffExporter : Exporter
     {
-        public override string Template
-        {
-            get
-            {
-                return Properties.Resources.TeslaStaff;
-            }
-        }
+        public override string Template => Properties.Resources.TeslaStaff;
 
         public TeslaStaffExporter(DrawablesOutput output) : base(output)
         {

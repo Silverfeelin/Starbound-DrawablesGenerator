@@ -9,10 +9,12 @@ namespace DrawablesGeneratorTool
     /// <summary>
     /// Interaction logic for OutputWindow.xaml
     /// </summary>
+    // ReSharper disable once RedundantExtendsListEntry
     public partial class OutputWindow : Window
     {
-        private string contentString = null;
-        private JToken contentObject = null;
+        private readonly string contentString;
+        private readonly JToken contentObject;
+
         private bool formatted = true;
 
         public OutputWindow(string title, JToken content, bool showToggleContent = true)
@@ -55,13 +57,15 @@ namespace DrawablesGeneratorTool
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Title = "Save file to...";
-            sfd.Filter = "JSON file|*.json|All files|*.*";
+            var sfd = new SaveFileDialog
+            {
+                Title = "Save file to...",
+                Filter = "JSON file|*.json|All files|*.*"
+            };
 
-            bool? result = sfd.ShowDialog();
+            var result = sfd.ShowDialog();
 
-            if (result.HasValue && result.Value)
+            if (result == true)
             {
                 File.WriteAllText(sfd.FileName, tbxCode.Text);
             }

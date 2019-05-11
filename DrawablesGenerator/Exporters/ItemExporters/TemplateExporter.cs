@@ -1,19 +1,10 @@
-﻿using Newtonsoft.Json.Linq;
-using Silverfeelin.StarboundDrawables;
-using System.IO;
+﻿using Silverfeelin.StarboundDrawables;
 
-namespace DrawablesGeneratorTool
+namespace DrawablesGeneratorTool.Exporters.ItemExporters
 {
-    public class TemplateExporter : Exporter, IExporter
+    public class TemplateExporter : Exporter
     {
-        private string template;
-        public override string Template
-        {
-            get
-            {
-                return template;
-            }
-        }
+        public override string Template { get; }
 
         /// <summary>
         /// 
@@ -22,7 +13,7 @@ namespace DrawablesGeneratorTool
         /// <param name="template"></param>
         public TemplateExporter(DrawablesOutput output, string template) : base(output)
         {
-            this.template = template;
+            Template = template;
         }
     }
 }

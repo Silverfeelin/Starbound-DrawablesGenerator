@@ -1,10 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
+using DrawablesGeneratorTool.Utilities;
 using Newtonsoft.Json.Linq;
 using Silverfeelin.StarboundDrawables;
 
-namespace DrawablesGeneratorTool
+namespace DrawablesGeneratorTool.Exporters
 {
     public abstract class Exporter : IExporter
     {
@@ -12,20 +13,20 @@ namespace DrawablesGeneratorTool
 
         public abstract string Template { get; }
 
-        public Exporter(DrawablesOutput output)
+        protected Exporter(DrawablesOutput output)
         {
             this.output = output;
         }
 
         public virtual JObject GetDescriptor(string group, bool addInventoryIcon)
         {
-            JObject descriptor = CreateDescriptor(Template, group, addInventoryIcon);
+            var descriptor = CreateDescriptor(Template, group, addInventoryIcon);
             return descriptor;
         }
         
         public virtual string GetCommand(string group, bool addInventoryIcon)
         {
-            JObject descriptor = CreateDescriptor(Template, group, addInventoryIcon);
+            var descriptor = CreateDescriptor(Template, group, addInventoryIcon);
             return GenerateCommand(descriptor);
         }
 
@@ -33,7 +34,7 @@ namespace DrawablesGeneratorTool
         {
             if (File.Exists(path))
             {
-                MessageBoxResult mbr = MessageBox.Show("The file already exists. Do you want to overwrite it?", "Warning", MessageBoxButton.YesNo);
+                var mbr = MessageBox.Show("The file already exists. Do you want to overwrite it?", "Warning", MessageBoxButton.YesNo);
                 if (mbr != MessageBoxResult.Yes)
                     return;
             }
@@ -43,15 +44,15 @@ namespace DrawablesGeneratorTool
 
         protected string GenerateCommand(JObject descriptor)
         {
-            string output = string.Format("/spawnitem {0} 1 '{1}'",
+            // ReSharper disable once UseStringInterpolation
+            return string.Format("/spawnitem {0} 1 '{1}'",
                 descriptor["name"].Value<string>(),
                 descriptor["parameters"].ToString(Newtonsoft.Json.Formatting.None));
-            return output;
         }
 
         protected JObject CreateDescriptor(string template, string group = "weapon", bool addInventoryIcon = false)
         {
-            JObject descriptor = JObject.Parse(template);
+            var descriptor = JObject.Parse(template);
 
             if (descriptor["name"] == null)
                 descriptor["name"] = "perfectlygenericitem";
@@ -62,10 +63,8 @@ namespace DrawablesGeneratorTool
             if (descriptor["parameters"] == null)
                 descriptor["parameters"] = new JObject();
 
-            JObject parameters = (JObject)descriptor["parameters"];
+            var parameters = (JObject)descriptor["parameters"] ?? new JObject();
 
-            if (parameters == null)
-                parameters = new JObject();
             if (parameters["animationCustom"] == null)
                 parameters["animationCustom"] = new JObject();
             if (parameters["animationCustom"]["animatedParts"] == null)
@@ -73,19 +72,19 @@ namespace DrawablesGeneratorTool
             if (parameters["animationCustom"]["animatedParts"]["parts"] == null)
                 parameters["animationCustom"]["animatedParts"]["parts"] = new JObject();
 
-            JToken parts = parameters["animationCustom"]["animatedParts"]["parts"];
+            var parts = parameters["animationCustom"]["animatedParts"]["parts"];
 
-            string prefix = "D_";
-            int i = 1;
+            var prefix = "D_";
+            var i = 1;
 
-            JArray groups = new JArray();
+            var groups = new JArray();
             if (!string.IsNullOrEmpty(group))
                 groups.Add(group);
 
-            foreach (Drawable item in output.Drawables)
+            foreach (var item in output.Drawables)
             {
                 if (item == null) continue;
-                JObject part = JObject.Parse("{'properties':{'centered':false,'offset':[0,0]}}");
+                var part = JObject.Parse("{'properties':{'centered':false,'offset':[0,0]}}");
                 part["properties"]["image"] = item.ResultImage;
                 part["properties"]["offset"][0] = item.BlockX + Math.Round(output.OffsetX / 8d, 3);
                 part["properties"]["offset"][1] = item.BlockY + Math.Round(output.OffsetY / 8d, 3);

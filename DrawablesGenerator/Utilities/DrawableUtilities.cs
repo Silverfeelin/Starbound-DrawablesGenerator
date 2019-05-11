@@ -4,19 +4,18 @@ using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
 using Silverfeelin.StarboundDrawables;
 
-namespace DrawablesGeneratorTool
+namespace DrawablesGeneratorTool.Utilities
 {
     public static class DrawableUtilities
     {
         /// <summary>
-        /// Returns whether the given string is a valid positive or negative intregal number.
+        /// Returns whether the given string is a valid positive or negative number.
         /// </summary>
         /// <param name="value">The string to check for validity</param>
         /// <returns>True if the given string is a valid positive or negative integer.</returns>
         public static bool IsNumber(string value)
         {
-            Regex regex = new Regex("^-?[0-9]+$");
-
+            var regex = new Regex("^-?[0-9]+$");
             return regex.IsMatch(value);
         }
 
@@ -30,18 +29,7 @@ namespace DrawablesGeneratorTool
         /// <returns>The value if it's between minimum and maximum, minimum if smaller or maximum if larger.</returns>
         public static int Clamp(int value, int minimum, int maximum)
         {
-            if (value < minimum)
-            {
-                return minimum;
-            }
-            else if (value > minimum)
-            {
-                return maximum;
-            }
-            else
-            {
-                return value;
-            }
+            return value < minimum ? minimum : value > maximum ? maximum : value;
         }
 
         /// <summary>
@@ -51,32 +39,30 @@ namespace DrawablesGeneratorTool
         /// <param name="output">Output to read directives from.</param>
         /// <param name="baseScale">Base scale. Should be the biggest dimension in the source image this string will be applied to by the user.
         /// EG. If the user wishes to apply a drawable bigger than 30x50 to a 30x50 object, the base scale should be 50.</param>
-        /// <returns>Directives string</returns>
+        /// <param name="fade">Apply a small fade at the end of every drawable. This results in near-identical visuals but allows
+        /// for skipping over transparent pixels.</param>
+        /// <returns>Directives string.</returns>
         public static string GenerateSingleTextureDirectives(DrawablesOutput output, int baseScale = 64, bool fade = false)
         {
             int w = output.ImageWidth,
                 h = output.ImageHeight;
 
-            int max = w > h ? w : h;
-            int scale = (int)Math.Ceiling((double)max / baseScale);
+            var max = w > h ? w : h;
+            var scale = (int)Math.Ceiling((double)max / baseScale);
 
-            StringBuilder dir = new StringBuilder();
-            dir.AppendFormat("?setcolor=ffffff?replace;00000000=ffffff;ffffff00=ffffff?setcolor=ffffff?scalenearest={0}?crop=0;0;{1};{2}", scale, w, h);
+            var dir = new StringBuilder();
+            dir.AppendFormat("?setcolor=fff?replace;fff0=fff?scalenearest={0}?crop=0;0;{1};{2}", scale, w, h);
 
-            foreach (Drawable drawable in output.Drawables)
+            foreach (var drawable in output.Drawables)
             {
-                if (drawable != null)
-                {
-                    dir.AppendFormat("?blendmult={0};{1};{2}{3}", drawable.Texture, -drawable.X, -drawable.Y, drawable.Directives);
+                if (drawable == null) continue;
 
-                    if (fade)
-                    {
-                        dir.Append("?fade;80ff80;0.0001518");
-                    }
-                }
+                dir.AppendFormat("?blendmult={0};{1};{2}{3}", drawable.Texture, -drawable.X, -drawable.Y, drawable.Directives);
+
+                if (fade)
+                    dir.Append("?fade;80ff80;0.0001518");
             }
-
-            dir.Append("?replace;ffffffff=00000000");
+            dir.Append("?replace;fff=0000");
 
             return dir.ToString();
         }
@@ -92,7 +78,7 @@ namespace DrawablesGeneratorTool
         /// <param name="ignoreColor">String value of the color to ignore, presumably from a text field.
         /// If given, value should be formatted RRGGBB or RRGGBBAA (hexadecimal string).</param>
         /// <returns>Reference to the given object.</returns>
-        public static DrawablesGenerator SetUpGenerator(DrawablesGenerator generator, string handX, string handY, string ignoreColor = null)
+        public static DrawablesGenerator SetUpGenerator(DrawablesGenerator generator, string handX, string handY, string ignoreColor)
         {
             generator.OffsetX = Convert.ToInt32(handX) + 1;
             generator.OffsetY = Convert.ToInt32(handY);
@@ -102,38 +88,38 @@ namespace DrawablesGeneratorTool
             generator.ReplaceBlank = true;
             generator.ReplaceWhite = true;
 
-            string colorString = ignoreColor.Replace("#", "");
-            if (colorString.Length == 6 || colorString.Length == 8)
-            {
-                int r = ColorConversions.HexToInt(colorString.Substring(0, 2));
-                r = Clamp(r, 0, 255);
-                int g = ColorConversions.HexToInt(colorString.Substring(2, 2));
-                g = Clamp(g, 0, 255);
-                int b = ColorConversions.HexToInt(colorString.Substring(4, 2));
-                b = Clamp(b, 0, 255);
-                int a = colorString.Length == 8 ? ColorConversions.HexToInt(colorString.Substring(6, 2)) : 255;
-                a = Clamp(a, 0, 255);
+            var colorString = ignoreColor.Replace("#", "");
+            if (colorString.Length != 6 && colorString.Length != 8) return generator;
 
-                generator.IgnoreColor = System.Drawing.Color.FromArgb(a, r, g, b);
-            }
+            var r = colorString.Substring(0, 2).HexToInt();
+            r = Clamp(r, 0, 255);
+            var g = colorString.Substring(2, 2).HexToInt();
+            g = Clamp(g, 0, 255);
+            var b = colorString.Substring(4, 2).HexToInt();
+            b = Clamp(b, 0, 255);
+            var a = colorString.Length == 8 ? colorString.Substring(6, 2).HexToInt() : 255;
+            a = Clamp(a, 0, 255);
+
+            generator.IgnoreColor = System.Drawing.Color.FromArgb(a, r, g, b);
 
             return generator;
         }
 
         public static JArray GenerateInventoryIcon(DrawablesOutput output)
         {
-            JArray drawables = new JArray();
+            var drawables = new JArray();
 
-            for (int i = 0; i < output.Drawables.GetLength(0); i++)
+            for (var i = 0; i < output.Drawables.GetLength(0); i++)
             {
-                for (int j = 0; j < output.Drawables.GetLength(1); j++)
+                for (var j = 0; j < output.Drawables.GetLength(1); j++)
                 {
-                    Drawable item = output.Drawables[i,j];
-
+                    var item = output.Drawables[i,j];
                     if (item == null) continue;
 
-                    JObject drawable = new JObject();
-                    drawable["image"] = item.ResultImage;
+                    var drawable = new JObject
+                    {
+                        ["image"] = item.ResultImage
+                    };
 
                     bool cropH = false, cropV = false;
                     int hRest = 0, vRest = 0;
@@ -147,7 +133,7 @@ namespace DrawablesGeneratorTool
                     {
                         vRest = output.ImageHeight % 8;
                         if (vRest != 0)
-                            cropH = true;
+                            cropV = true;
                     }
                     
                     if (cropH || cropV)
@@ -156,9 +142,7 @@ namespace DrawablesGeneratorTool
                         drawable["image"] += "?crop;0;0;" + (cropH ? hRest : 32) + ";" + (cropV ? vRest : 8);
                     }
 
-                    JArray position = new JArray();
-                    position.Add(item.X);
-                    position.Add(item.Y);
+                    var position = new JArray { item.X, item.Y };
                     drawable["position"] = position;
                     drawables.Add(drawable);
                 }

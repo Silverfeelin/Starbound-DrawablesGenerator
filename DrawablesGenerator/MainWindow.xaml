@@ -132,6 +132,7 @@
                     <RowDefinition MaxHeight="26"/>
                     <RowDefinition MaxHeight="26"/>
                     <RowDefinition MaxHeight="26"/>
+                    <RowDefinition MaxHeight="26"/>
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" x:Name="lblGenerate" Content="Generate:" HorizontalAlignment="Left" VerticalAlignment="Top"
                        ToolTip="Generation methods. Hover over an option to view specific details."/>
@@ -171,14 +172,16 @@
                     </Button.Background>
                 </Button>
                 <Label Grid.Row="5" x:Name="lblSourceImageSize" Content="Source Image Size:" HorizontalAlignment="Left" VerticalAlignment="Top"
-                       ToolTip="The smallest dimension of the source image you're applying the single texture directives to.&#x0a;This value is only used when generating 'Single Texture Directives'.&#x0a;Example: When applying a drawable to a 16x8 image, you should use the value 8." Margin="10,0,0,0" Width="163"/>
+                       ToolTip="The smallest dimension of the source image you're applying the single texture directives to.&#x0a;This value is only used when generating 'Single Texture Directives'.&#x0a;Example: When applying a drawable to a 16x8 image, you should use the value 8." Margin="8,0,0,0" Width="163"/>
                 <TextBox Grid.Row="5" x:Name="tbxSourceImageSize" Height="18" TextWrapping="NoWrap" Text="64" VerticalAlignment="Top" AllowDrop="False" TextAlignment="Right" MaxLines="1" MaxLength="6"
-                         ToolTip="The smallest dimension of the source image you're applying the single texture directives to.&#x0a;This value is only used when generating 'Single Texture Directives'.&#x0a;Example: When applying a drawable to a 16x8 image, you should use the value 8." Margin="178,4,10,0"/>
+                         ToolTip="The smallest dimension of the source image you're applying the single texture directives to.&#x0a;This value is only used when generating 'Single Texture Directives'.&#x0a;Example: When applying a drawable to a 16x8 image, you should use the value 8." Margin="176,4,9.667,0"/>
 
-                <Label Grid.Row="6" x:Name="lblFade" Content="Fade Method:" HorizontalAlignment="Left" VerticalAlignment="Top"
-                    ToolTip="Check to use the fade method for single texture directives. This method reduces the data size as less directives are needed.&#xA;Using this method other directives can not be reliably appended to the output. The output may have slight color deviations (unnoticeable to the eye)." Margin="10,26,0,-25" Width="163"/>
-                <CheckBox Grid.Row="5" x:Name="chkFade" IsChecked="True" HorizontalAlignment="Left" Margin="126,32,0,-23" VerticalAlignment="Top"
-            ToolTip="Check to use the fade method for single texture directives. This method reduces the data size as less directives are needed.&#xA;Using this method other directives can not be reliably appended to the output. The output may have slight color deviations (unnoticeable to the eye)." Height="18" Width="18"/>
+                <Label Grid.Row="6" x:Name="lblFade" Content="Fade Method:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="8,0.667,0,0" Width="134"
+                    ToolTip="Check to use the fade method for single texture directives. This method reduces the data size as less directives are needed."/>
+                <CheckBox Grid.Row="6" x:Name="chkFade" IsChecked="true" ToolTip="Check to use the fade method for single texture directives. This method reduces the data size as less directives are needed." Margin="121,5.667,0,0" Height="16" VerticalAlignment="Top" HorizontalAlignment="Left" Width="16" Click="ChkFade_Click"/>
+                <Label Grid.Row="6" x:Name="lblScale" Content="Scale Method:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="140,0.667,0,0" Width="134"
+                       ToolTip="Use a gradient scaling method for single texture directives. Only works reliably for images up to 256x256."/>
+                <CheckBox Grid.Row="6" x:Name="chkScale" ToolTip="Use a gradient scaling method for single texture directives. Only works reliably for images up to 256x256." Height="16" Margin="258,5.667,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="16" Click="ChkScale_Click"/>
             </Grid>
         </Border>
         <!-- /Select Generate Option -->

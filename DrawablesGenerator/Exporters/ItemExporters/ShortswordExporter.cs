@@ -1,17 +1,10 @@
-﻿using Newtonsoft.Json.Linq;
-using Silverfeelin.StarboundDrawables;
+﻿using Silverfeelin.StarboundDrawables;
 
-namespace DrawablesGeneratorTool
+namespace DrawablesGeneratorTool.Exporters.ItemExporters
 {
-    public class ShortswordExporter : Exporter, IExporter
+    public class ShortswordExporter : Exporter
     {
-        public override string Template
-        {
-            get
-            {
-                return Properties.Resources.Sword;
-            }
-        }
+        public override string Template => Properties.Resources.Sword;
 
         public ShortswordExporter(DrawablesOutput output) : base(output)
         {

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace DrawablesGeneratorTool
+namespace DrawablesGeneratorTool.Exporters
 {
     public interface IExporter
     {
